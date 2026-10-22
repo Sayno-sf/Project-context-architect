@@ -1,131 +1,127 @@
 # Project Context Architect
 
-> Maintain a project's **smallest authoritative context**: a small, explicit, current set of repository files that lets any fresh session understand the project without inheriting chat history or reading the entire repository.
+**Help AI coding assistants pick up a project in a new session.**
+
+Keep project goals, current work, architecture entry points and operating instructions up to date. Retire stale status claims; review only affected content during routine updates.
 
 [中文](README.md) | **English**
 
-## What this is
+[![CI](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-The most common problem AI agents hit in long-lived projects is **fragmented context**: facts scattered across chat history, outdated design docs, overturned decisions, and old notes that still look alive. This project proposes a governance layer — **minimum authority**:
+## When to use it
 
-- A small set of repository files with explicit responsibilities, owning the current truth.
-- **One fact, one owner**: every current fact belongs to exactly one authority document; everything else links to it.
-- **Current truth and history separated**: history is archived and labeled "non-authoritative" and never participates in handoff judgments.
-- **Category-aware conflict verification**: conflicts are verified with category-appropriate evidence, not inferred from implementation.
-- **Authority completion gate**: a task is not complete while affected authority remains stale.
+This is a skill for AI coding assistants that support local skills. Use it when:
 
-It manages **project context**, not business implementation.
+- **New sessions lose the thread:** you keep explaining what the project does, where it stands and what comes next.
+- **Documents disagree:** a feature is complete, but an old TODO, issue list or handoff summary still says it is pending.
+- **Project notes keep accumulating:** current rules, past proposals and working notes are mixed together, with no clear source to trust.
 
-## Three modes
+The skill gives current facts a small set of clearly owned project files. Other summaries link to those owners. When a fact changes, it updates the original statement and affected summaries instead of appending another status log.
 
-| Mode | When to use | Output |
-|---|---|---|
-| **BOOTSTRAP** | A new or early project lacks a handoff system | Minimal authority set (`AGENTS.md` + `PROJECT_STATE.md`, plus `ARCHITECTURE.md` / `DECISIONS.md` / `RUNBOOK.md` when justified) |
-| **REFACTOR** | An established project's context is scattered, duplicated, stale, or contradictory | Single authority ownership + archived history + a converged handoff |
-| **CHECK** | Inspect named facts/documents or handoff readiness | Read-only result; a narrow check does not establish full readiness |
+## Install
 
-Mode selection: choose the least expansive mode that fits. A CHECK may recommend REFACTOR; it never silently expands into one.
+Choose your platform. Install the **complete repository directory**, preserving its contents. For a direct skill installation, name the directory `project-context-architect`.
 
-Small updates use [incremental maintenance](references/maintenance.md) directly: read the affected section, verify evidence, find dependent summaries, replace stale facts, then review the batch diff and links. Reuse current session context; no full-file reread for each write, and no write-back when facts are unchanged.
+### Codex
 
-The full seven-question test is for BOOTSTRAP, broad REFACTOR or requested handoff/milestone acceptance. Contradictions, unclear ownership or uncertain impact trigger wider relevant reading first. CHECK stays read-only unless repairs are requested. Full readiness is `NOT_ASSESSED` after a narrow check, `NEEDS_ATTENTION` when defects remain, and `GOOD` only after full handoff verification in the declared scope. Source, build, loaded service and acceptance remain separate claims.
-
-## Quick start
-
-### Install (recommended)
-
-**Installation semantics**: the whole `project-context-architect/` directory is one complete skill unit — `SKILL.md` is the entry point; `references/`, `examples/`, `fixtures/`, and `scripts/` are its resource subdirectories. To install, copy the **entire directory** into your agent's skills root (keeping the directory name `project-context-architect`) — do not flatten its internal files. Directory contents:
-
-| Layer | Contents | Required at runtime |
-|---|---|---|
-| Runtime core | `SKILL.md`, `references/`, `examples/`, `agents/openai.yaml` | Core and Codex metadata |
-| Rehearsal & regression | `fixtures/`, `scripts/` (pure stdlib, no dependencies) | Optional |
-| Release layer | README.md, LICENSE, CHANGELOG.md, CONTRIBUTING.md, .github/, .gitignore, PLUGIN.md, .claude-plugin/ | Not required at runtime; may be skipped |
-
-Then use it in your projects:
-
-- New project: ask your agent to run **BOOTSTRAP**
-- Messy existing project: **REFACTOR**
-- Before handoff: **CHECK**
-
-#### One-shot install prompt (copy and send to any agent)
-
-Copy the whole block below to your agent (Claude Code, Codex, or any skills-capable assistant):
+In Codex with local skill support, send:
 
 ```text
-Please install the project-context-architect skill (project minimum-authority context governance).
-
-1. Get the source (choose one):
-   - Repository: git clone https://github.com/lhq418899-sketch/Project-context-architect.git
-   - Local: use this directory on my machine: <fill in the source directory path>
-2. Install: copy the entire directory (SKILL.md plus the references/, examples/, fixtures/, scripts/ subdirectories) as one complete skill unit into your skills root, keeping the directory name project-context-architect. Do not flatten internal files or scatter them elsewhere.
-3. If your platform supports plugin marketplaces (e.g. Claude Code), you may instead use:
-   claude plugin marketplace add lhq418899-sketch/Project-context-architect
-   claude plugin install project-context-architect@project-context-architect-marketplace
-4. If you use OpenAI Codex with local skill support, install via the official skill-installer or copy to your skills dir:
-   Ask the built-in skill-installer to install from https://github.com/lhq418899-sketch/Project-context-architect
-   (or copy the whole directory to ~/.codex/skills/)
-5. Verify: SKILL.md exists with complete frontmatter; if Python 3 is available, run python scripts/lint_skill.py and python scripts/check_fixture.py — both should pass.
-6. Tell me where it was installed and the verification result.
+Use skill-installer to install project-context-architect from the root of:
+https://github.com/lhq418899-sketch/Project-context-architect
+Keep the complete directory. If already installed, back up the old copy before
+updating it, and tell me the actual installation path.
 ```
 
-Other distribution channels (official directory / self-hosted marketplace / plugin install): see [PLUGIN.md](PLUGIN.md).
+### Claude Code
 
-### Concepts and execution details
+Run in your terminal:
 
-- Authority model, file naming, and one-fact-one-owner: [references/authority-model.md](references/authority-model.md)
-- Mode execution details: [references/bootstrap.md](references/bootstrap.md), [references/refactor.md](references/refactor.md), [references/check.md](references/check.md)
-- Fresh-session readiness test (7 questions): [references/fresh-session-test.md](references/fresh-session-test.md)
-- Golden examples (fictional project): [examples/bootstrap/](examples/bootstrap/)
-- Deliberately broken rehearsal project: [fixtures/messy/](fixtures/messy/)
-
-## Repository layout
-
-```
-project-context-architect/
-├── SKILL.md                    # main skill (three-mode entry + shared operating contract)
-├── references/                 # authority model / mode details / fresh-session test
-├── examples/bootstrap/         # golden examples (fictional project, do not copy)
-├── fixtures/messy/             # deliberately broken rehearsal project (regression fixture)
-├── scripts/                    # deterministic validation scripts (pure stdlib)
-├── agents/openai.yaml          # Codex-side interface config
-├── .claude-plugin/plugin.json  # Claude plugin metadata
-├── .claude-plugin/marketplace.json # marketplace manifest
-└── PLUGIN.md                   # plugin distribution guide
+```bash
+claude plugin marketplace add lhq418899-sketch/Project-context-architect
+claude plugin install project-context-architect@project-context-architect-marketplace
 ```
 
-## Check real projects
+### Other assistants with local skill support
+
+Download and extract a source archive from [Releases](https://github.com/lhq418899-sketch/Project-context-architect/releases). Name the complete directory `project-context-architect` and put it in your assistant's supported skills directory. Loading behavior depends on the platform.
+
+Confirm that your assistant can discover the skill, then open the target project. See [PLUGIN.md](PLUGIN.md) for installation and validation details.
+
+## First use
+
+Copy one of these prompts into a session for your project. Describe the task in ordinary language; you do not need to memorize mode names.
+
+### 1. Check without changing files
+
+```text
+Use project-context-architect to review this project's handoff documents, read-only.
+Identify stale status, duplicated facts and missing entry points. Give file
+locations and the smallest suggested repairs.
+```
+
+You get a report stating what was inspected. The check itself does not edit files or archive material.
+
+### 2. Establish or organize project documents
+
+```text
+Use project-context-architect to establish or organize this project's handoff docs.
+You may edit relevant documents. Preserve existing project rules and useful
+history; do not change business code. Put current status, architecture and
+operating instructions in suitable owners, and mark unsupported claims as uncertain.
+```
+
+The assistant reuses suitable documents, adds only needed content, and checks whether a new session can locate current work and the next step.
+
+### 3. Update status after completing work
+
+```text
+Use project-context-architect to update project documents from the changes
+verified in this session. Check only affected sections and dependent summaries.
+Replace stale facts; if no facts changed, leave the documents untouched.
+```
+
+For example, a verified fix should no longer appear as pending in the issue list or next steps. Deployment still needs its own evidence. A routine update does not require rereading every file or running a full handoff review.
+
+## What it creates or maintains
+
+The exact files follow your project's existing conventions. Common responsibilities are:
+
+| File | Responsibility |
+|---|---|
+| `AGENTS.md` or an existing equivalent | Working rules and what a new session reads first |
+| `PROJECT_STATE.md` | Current status, active work, known issues and next steps |
+| `ARCHITECTURE.md` | Current components, entry points, data flow and boundaries |
+| `RUNBOOK.md` | Environment, startup, tests and troubleshooting |
+| `DECISIONS.md` | Decision rationale worth preserving |
+
+New projects start with a working-protocol entry and current state. Other files are created only when they have substantive content. Sound existing names and structures are reused. History is preserved and labeled; handoff summaries favor links over another copy of current status.
+
+Browse the [fictional project example](examples/bootstrap/) to see the document shapes. Its features and verification claims illustrate the format; they are not measured results.
+
+## Boundaries
+
+- **Checks are read-only by default.** Edits and archival must fall within your request. This skill manages project context, not business implementation.
+- **Document checks do not certify facts.** Scripts check structure, links and some suspicious wording. Meaning, product intent and live runtime state still require appropriate evidence.
+- **Installation does not take over a project.** The skill does not monitor repositories in the background, replace existing project protocols or install CI automatically. Request those changes in the relevant project when needed.
+
+## Further use
+
+Routine work uses incremental maintenance. For explicit scopes, use `BOOTSTRAP` to establish a context system, `REFACTOR` to consolidate it, or `CHECK` to inspect it.
+
+- [Incremental maintenance](references/maintenance.md) · [Document and fact ownership](references/authority-model.md)
+- [BOOTSTRAP](references/bootstrap.md) · [REFACTOR](references/refactor.md) · [CHECK](references/check.md)
+- [Seven questions for a full handoff review](references/fresh-session-test.md)
+
+For a script-based check, run from this skill's directory (Python 3.10+, standard library only):
 
 ```bash
 python -B scripts/check_project_context.py /path/to/project
-python -B scripts/check_project_context.py /path/to/project --baseline-ref HEAD --json
 ```
 
-Mechanical errors fail the check; growth, repetition and candidate status contradictions require review. The script does not certify semantic truth or deployment. Custom paths/headings are configurable. With authorization, copy the two standalone scripts into a project and integrate its existing CI without depending on a local skill installation.
+The defaults expect conventional filenames and headings; configure equivalents when your project differs. See [real-project checks](references/project-checks.md) for configuration, result interpretation and optional CI integration.
 
-See [configuration, integration and acceptance](references/project-checks.md). Existing projects do not automatically receive new protocols or CI gates.
+For regression commands used to maintain this skill, see [scripts/README.md](scripts/README.md). The `verify_refactor.py` script accepts only refactored copies of the rehearsal fixture, not arbitrary projects.
 
-## Regression tests
-
-Run after every change (no dependencies required):
-
-```bash
-python scripts/lint_skill.py        # structure: files, links/anchors, encoding, package metadata
-python scripts/check_fixture.py     # confirm the rehearsal fixture is still deliberately broken
-python -B -m unittest discover -s scripts -p "test_*.py"
-python scripts/verify_refactor.py <dir>  # structural acceptance of a REFACTOR result
-```
-
-See [scripts/README.md](scripts/README.md). The repository includes CI configuration for lint, fixture checks and regression tests on push / PR; remote success requires an observed run (see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
-
-## Language policy
-
-The project's documents are **bilingual, Chinese-first**: the core execution files (`SKILL.md`, `references/`, `examples/`) stay in English to keep agent triggering and execution consistent across platforms, while human-facing distribution and contribution docs are Chinese-first. This English README is a translation for international readers. Contributions of further translations are welcome.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-[MIT](LICENSE) © 2026 lhq418899-sketch
+[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [MIT License](LICENSE)
