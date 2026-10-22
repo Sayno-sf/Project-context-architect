@@ -20,7 +20,7 @@ The development-protocol owner defaults to `AGENTS.md`, the cross-tool agent con
 
 - Reuse a platform equivalent the project already maintains — `CLAUDE.md`, `COPILOT.md`, `GEMINI.md`, or another project-level agent instruction file — instead of creating a parallel `AGENTS.md`. Merge the two root protocols into that file and use its name wherever this skill says `AGENTS.md`.
 - When the project has no equivalent, create `AGENTS.md`.
-- Never maintain parallel convention files; one fact, one owner applies to protocol files too.
+- Keep one canonical protocol owner. Preserve thin platform entry files when tooling requires them; they link or import that owner using the platform's supported mechanism instead of duplicating rules. Verify that the actual tools discover the owner; a filename substitution alone is not proof.
 - Reports, read maps, and the fresh-session test name the file actually used.
 
 ## `README.md`
@@ -40,24 +40,19 @@ Prefer one existing filename when a repository already has an equivalent owner. 
 
 ## One fact, one owner
 
-Assign the category before resolving a conflict:
+Use the ownership table and optional categories above. Write the complete fact only in its owner. Other documents use a short contextual sentence and a relative link. A summary is a projection, not an independently maintained decision. A small category can remain in an existing suitable owner until its substance justifies a separate file.
 
-- current sprint, status, next step → `PROJECT_STATE.md`
-- current components, boundaries, entry points, data flow → `ARCHITECTURE.md`
-- stable product invariant → `PRODUCT_RULES.md`
-- runtime and validation commands → `RUNBOOK.md`
-- enduring rationale → `DECISIONS.md`
-- project working protocol → `AGENTS.md`
-- terminology → `DOMAIN.md` or `CONTEXT.md`
+## Maintaining current facts
 
-Write the complete fact only in its owner. Other documents use a short contextual sentence and a relative link, for example `See [ARCHITECTURE.md](ARCHITECTURE.md).`
+Use [incremental maintenance](maintenance.md): read the affected section, verify evidence, locate dependent summaries, replace stale claims, and close the batch. Do not reread every authority file or create a delta artifact for each write. Broaden inspection only when dependencies or contradictions require it.
 
-## Authority precedence
+For volatile claims, identify the component/repository, environment, state, and verification evidence/date where relevant. Distinguish implemented source, built assets, loaded service, observed runtime and user acceptance. Evidence for one does not establish another. A mention of an adjacent deployment does not authorize access to it; respect task scope and mark unverified targets.
 
-1. An explicit current user decision may supersede stale repository authority.
-2. Once accepted, codify that decision in the appropriate repository owner during the same context-maintenance task.
-3. The updated repository authority remains the long-term source of truth.
-4. Old chat history, old prompts, and unrecorded prior discussion are non-authoritative.
+Architecture owns mechanisms and boundaries, the runbook owns repeatable operations, and project state owns current delivery and outstanding work. Keep one-off PIDs, test counts, backup manifests and migration receipts in evidence records. Closed issues leave Known Issues; completed tasks stop appearing as Current Work.
+
+Keep L0 cheap to read. Review character count or estimated tokens, repeated claims and the effort to answer the seven handoff questions; line count alone hides long paragraphs. Split substantial L1 detail by stable responsibility and link to the relevant section. Do not add files merely to meet a numeric budget or push release history into CURRENT_SPRINT.md.
+
+Before changing context files, inspect relevant consumers. If a prompt loader, CI job or runtime reads the file, a documentation edit may affect behavior. Preserve required paths, imports and runtime-facing content unless those behavior changes are part of the user's request.
 
 ## Category-aware conflict verification
 
@@ -71,7 +66,7 @@ For each conflict:
    - architecture as implemented → current code and configuration, reconciled with accepted architectural decisions;
    - product invariants, permissions, and intended behavior → explicit current user decisions and their maintained authority owner; implementation is evidence only of whether the product currently conforms;
    - decision rationale → accepted ADRs or an explicit current user decision, not inference from code shape.
-3. Update the owner with verified truth and replace competing current-looking claims with a link, historical label, or explicit supersession marker.
+3. When edits are authorized, update the owner with verified truth and replace competing current-looking claims with a link, historical label, or explicit supersession marker. Otherwise report the proposed reconciliation.
 4. Escalate a conflict that changes product meaning, permissions, or user-visible behavior when the evidence cannot settle it.
 
 Observed implementation is evidence of implementation state, not automatically evidence of intended product truth. A buggy implementation that violates a maintained product rule is a defect signal, not permission to rewrite the rule.
@@ -109,35 +104,31 @@ Also merge this event-driven write-back contract into the same root file:
 ```md
 ## Authority Maintenance Protocol
 
-Apply this protocol to tasks that change project facts. Read-only analysis, explanation, and review require no authority edit unless they produce an accepted decision.
+Apply during authorized work that changes project facts. Read-only review reports proposed changes. If no authority fact changes, leave authority untouched.
 
-### Task Start
+### Incremental maintenance
 
-1. Read L0 Orientation: `AGENTS.md` and `PROJECT_STATE.md`.
-2. Identify which authority categories the task may affect and load only their L1 documents.
-3. Update `PROJECT_STATE.md > Current Work` before implementation only when this task becomes the project's main tracked work, changes `Next`, or replaces the current task.
+1. Read L0 once per session, then only the L1 sections needed for the task. Reuse current context; refresh a target that may have changed before editing. Track Current Work only when the task changes the project's main work or Next.
+2. For a changed fact, read its owner section, verify new evidence, and search active authority and known summaries for the subject, aliases and links. Follow known dependencies; an absent keyword match does not establish that no dependent summary exists. Expand only if ownership, evidence or impact is unclear. No full-file reread or permanent delta table is required for every write.
+3. Update the owner in the same task and retire affected stale summaries, issues and Next entries. Codify an accepted user decision before work depends on it. Leave unrelated facts and history alone; link useful evidence instead of appending a delivery diary.
+4. Keep source, build, loaded service and acceptance distinct. Label plans and unknowns; implementation alone cannot rewrite a product rule. Preserve existing rules and runtime consumers when moving or rewriting documents.
+5. At the end of a coherent batch, inspect the diff, changed claims, dependent summaries and links. Run the documented project check if required by the workflow; review relevant findings without treating mechanical PASS as truth. Report unrelated failures separately; do not claim the whole scan passed. No per-write check or repeated unchanged report is needed.
 
-### Authority Checkpoints
+Use existing owners: status/work/issues/Next in project state; mechanisms in architecture; repeatable commands in the runbook; durable rationale in decisions; constraints in their established rule owner. Create a separate owner only when its content warrants one. Keep handoff pointers compact rather than duplicating current status.
 
-- Codify an accepted explicit user decision in its owner before later work depends on it.
-- When verified work changes an authority fact, update its owner in the same task:
-  - status, current work, issues, or next step → `PROJECT_STATE.md`
-  - implemented components, boundaries, entry points, or data flow → `ARCHITECTURE.md`
-  - durable decision and rationale → `DECISIONS.md`
-  - environment, start, test, build, validation, or debugging → `RUNBOOK.md`
-  - product invariant or permission boundary → `PRODUCT_RULES.md`
-- Create a missing conditional authority file only when the change gives that category substantive content.
-- Mark implementation as `Implemented` only after verification. Plans and work in progress remain identified as such.
-- When no authority fact changes, leave authority documents untouched.
+### Full handoff check
 
-### Task Completion Gate
+After establishing or broadly reorganizing context, or when handoff/milestone readiness is requested, answer all seven from L0 and its named L1 links with file/section evidence:
 
-1. Reconcile the authority delta across every affected category.
-2. Update only changed `PROJECT_STATE.md` facts, including status, known issues, next step, and handoff pointers.
-3. Record an unresolved semantic conflict as an explicit unresolved issue without guessing its answer.
-4. Run the L0 fresh-session test checklist in [fresh-session-test.md](fresh-session-test.md).
-5. Treat the task as incomplete while any affected authority remains stale.
-6. If there was no authority impact, report `Authority impact: none` and make no authority edit.
+1. Project and audience.
+2. Current status and work.
+3. Entry point and start command.
+4. Components, data flow and state ownership.
+5. Hard constraints and non-goals.
+6. Next action and stop condition.
+7. Existing owners/links for architecture and operations.
+
+A category with no implementation/content yet may be explicitly absent; an existing capability needs a documented owner. Missing or contradictory answers fail readiness. Ordinary maintenance rechecks only affected answers and does not claim full readiness. Affected stale authority remains incomplete; report material uncertainty without guessing. Document review is a self-check unless an independent session actually performed acceptance.
 ```
 
 Merge semantically equivalent existing rules instead of appending a duplicate protocol.
@@ -161,21 +152,11 @@ Last Updated: YYYY-MM-DD
 ## New Session Handoff
 ```
 
-The handoff must contain:
+The handoff is a navigation capsule: link to current work, constraints, Next and relevant L1 owners instead of restating volatile content. Use a short link list when enough; extra subheadings are optional.
 
-```md
-### Project
-### Current Product State
-### Current Work
-### Current Architecture
-### Important Constraints
-### Next
-### Read Next If Needed
-```
+Keep only constraints that affect decisions; no count quota. Keep detailed sprint narrative out of current authority.
 
-Use three to eight truly important constraints. Keep detailed sprint narrative out of current authority.
-
-Keep `New Session Handoff` compact, preferably around 30–80 lines. It is an orientation capsule and pointer map, not a second copy of the authority set.
+Keep `New Session Handoff` compact and verify anchors after renaming/removing sections. Generated project protocols must work without this skill installed: include the short seven-question check above or link to an existing project-local definition, never a skill-relative path.
 
 ### `ARCHITECTURE.md`
 

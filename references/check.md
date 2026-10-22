@@ -1,41 +1,27 @@
 # CHECK
 
-Use this mode after a sprint, milestone, or major refactor, or immediately before handing the project to a fresh session.
+Inspect the requested context without changing it. Use a bounded check for a named fact or document; use a full handoff check when asked about fresh-session or milestone readiness. CHECK does not automatically become REFACTOR.
 
 ## Inspect proportionally
 
-Read L0 Orientation (`AGENTS.md` and `PROJECT_STATE.md`) first. Follow their pointers into L1 Task Context only far enough to verify the categories affected by recent work. Use the category-aware verification rules in [authority-model.md](authority-model.md) when a current claim is disputed.
+Use L0 Orientation (`AGENTS.md` and `PROJECT_STATE.md`, or established equivalents) and follow only the L1 pointers needed for the scope. Reuse already-read context. For a disputed claim, apply [category-aware verification](authority-model.md#category-aware-conflict-verification).
 
-Check for:
+Look for defects relevant to the request:
 
-- a missing, duplicated, or incomplete authority-maintenance protocol in the root agent convention file (by default `AGENTS.md`);
-- authority mappings that name unnecessary or nonexistent project documents;
-- maintenance rules that force edits when no authority fact changed;
-- a completion rule that permits affected authority to remain stale;
-- conflicting authority owners;
-- stale current status or current work;
-- old designs that still look current;
-- an overgrown `PROJECT_STATE.md`;
-- root-level sprint, review, fix, migration, or prompt history;
-- runtime commands that diverge from scripts or configuration;
-- changed architectural entry points or ownership;
-- missing links to the appropriate deeper authority;
-- a fresh session needing broad history or a repository-wide read to orient.
+- competing owners, stale status or plans presented as implemented;
+- old designs or history still presented as current;
+- missing links, invalid commands or changed entry points;
+- bloated L0 or a read map requiring broad history/source reads;
+- duplicated protocols, forced no-op writes, or a completion rule that leaves affected facts stale.
 
-## Apply narrow repairs
+A narrow fact check does not need a protocol overhaul. When evidence exposes a wider problem, report its consequence and the smallest repair; expand inspection only as needed to understand it.
 
-Correct verified stale facts in their owner, replace duplication with links, update affected handoff text, and archive clearly historical artifacts when that action is unambiguous. Narrowly add or repair the root agent convention file's authority-maintenance protocol when its intended owner and wording are clear; preserve existing project rules and avoid copying it into nested copies of the convention file. Preserve sound documents unchanged. If the repair would require a broad taxonomy change, substantial conflict resolution, or uncertain semantic choice, report that REFACTOR is warranted instead of silently expanding scope.
+## Repairs
 
-At a sprint or milestone boundary, consider only owners whose truth changed:
+Read-only findings name the owner, evidence and proposed repair. When repairs are requested, correct verified stale claims and their dependent summaries, preserve project-specific rules, and leave sound documents unchanged. Archive only history within the requested cleanup. Report broader restructuring or unresolved product choices instead of silently expanding the edit.
 
-- status and next work → `PROJECT_STATE.md`;
-- component or data-flow changes → `ARCHITECTURE.md`;
-- enduring rationale → `DECISIONS.md`;
-- commands and environment → `RUNBOOK.md`;
-- stable product invariants → `PRODUCT_RULES.md`.
+## Verify and report
 
-Archive the detailed review; keep only its current consequences in authority.
+For narrow checks, verify the affected claims and links using [incremental maintenance](maintenance.md), without its write steps. For handoff readiness, use the full [fresh-session test](fresh-session-test.md) and available [mechanical checks](project-checks.md). Do not install scripts, configuration or hooks during read-only CHECK.
 
-## Verify readiness
-
-Run the fresh-session test from [fresh-session-test.md](fresh-session-test.md) and the authority delta gate. CHECK is complete when every inspected category is either healthy, narrowly repaired, or named as a concrete unresolved problem. Return `GOOD` only when the handoff test passes, the root maintenance protocol is coherent, affected authority is current, and material uncertainty is absent; otherwise return `NEEDS_ATTENTION` with the smallest next action.
+State the inspected scope, result and remaining limits. Use `GOOD` only after the full handoff test passes with no material conflict in scope; use `NEEDS_ATTENTION` for concrete defects and `NOT_ASSESSED` for full readiness when only a narrow check was performed. An audit can finish while readiness remains `NEEDS_ATTENTION`.

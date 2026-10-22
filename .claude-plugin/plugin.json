@@ -1,14 +1,16 @@
 {
   "name": "project-context-architect",
   "description": "Establish and maintain a project's smallest authoritative context: handoff docs, authority refactor, and fresh-session readiness checks.",
-  "version": "0.1.0",
+  "version": "0.3.1",
   "author": {
     "name": "lhq418899-sketch"
   },
   "license": "MIT",
   "homepage": "https://github.com/lhq418899-sketch/Project-context-architect",
-  "category": "development",
-  "tags": [
+  "skills": [
+    "./"
+  ],
+  "keywords": [
     "context",
     "handoff",
     "documentation",

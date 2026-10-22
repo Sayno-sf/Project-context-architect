@@ -25,7 +25,7 @@ Ask only what the evidence cannot answer; never ask what the repository already 
 
 ## Create the minimum authority
 
-Read [authority-model.md](authority-model.md) and glance at [examples/bootstrap/](../examples/bootstrap/) for the target register and density, then always create or adapt:
+Read [authority-model.md](authority-model.md); consult a relevant [example](../examples/bootstrap/) only if the desired shape is unclear. Create or adapt:
 
 1. the agent convention file (`AGENTS.md` by default; reuse a platform equivalent the project already maintains — see the naming rule in authority-model.md)
 2. `PROJECT_STATE.md`
@@ -40,9 +40,11 @@ Keep initial files short. Represent a missing category through absence, not an e
 
 Create an optional authority document only when the evidence already demonstrates its need. Keep current work in `PROJECT_STATE.md` unless a substantial execution contract justifies `CURRENT_SPRINT.md`.
 
-In the project-root agent convention file (by default `AGENTS.md`), merge both templates from [authority-model.md](authority-model.md): `New Session Protocol` governs read-on-demand orientation, while `Authority Maintenance Protocol` governs event-driven write-back and the completion gate. Preserve existing project rules and keep these root protocols out of nested copies of the convention file.
+In the project-root convention file, adapt the two protocols from [authority-model.md](authority-model.md): read-on-demand orientation and incremental write-back, with the seven questions reserved for full handoff checks. Preserve existing project rules and keep root protocols out of nested copies.
 
 ## Verify handoff
+
+For actual-project checks and requested project-local integration, follow [project-checks.md](project-checks.md). Do not claim a CI gate is active merely because a workflow was written. Preserve existing tools and conventions.
 
 Run the fresh-session test from [fresh-session-test.md](fresh-session-test.md). Also check:
 

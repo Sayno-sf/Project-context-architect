@@ -2,9 +2,9 @@
 
 Checks (deterministic only):
   1. required files exist
-  2. all relative Markdown links resolve (examples/bootstrap/ excluded: it points into a fictional project)
+  2. local Markdown links and section anchors resolve, including examples
   3. every .md/.py/.yaml/.json file is strict UTF-8 without BOM
-  4. SKILL.md still carries the key contract phrases
+  4. frontmatter and distribution metadata have the supported structure
 
 Exit code 0 = all pass, 1 = any failure. Pure stdlib, no dependencies.
 """
@@ -12,6 +12,8 @@ Exit code 0 = all pass, 1 = any failure. Pure stdlib, no dependencies.
 from __future__ import annotations
 
 import re
+import json
+from document_checks import check_links as document_links
 import sys
 from pathlib import Path
 
@@ -22,6 +24,12 @@ REQUIRED_FILES = [
     "references/authority-model.md",
     "references/bootstrap.md",
     "references/check.md",
+    "references/project-checks.md",
+    "references/maintenance.md",
+    "scripts/check_project_context.py",
+    "scripts/test_project_context.py",
+    "examples/integration/context-check.json",
+    "examples/integration/context-check.yml",
     "references/refactor.md",
     "references/fresh-session-test.md",
     "examples/README.md",
@@ -39,7 +47,10 @@ REQUIRED_FILES = [
     "fixtures/messy/tests/test_summarize.py",
     "agents/openai.yaml",
     ".claude-plugin/plugin.json",
-    "marketplace.json",
+    ".claude-plugin/marketplace.json",
+    "scripts/document_checks.py",
+    "scripts/test_validation.py",
+    "examples/bootstrap/ARCHITECTURE.md",
     "PLUGIN.md",
     "scripts/README.md",
     # 发布配套
@@ -52,62 +63,15 @@ REQUIRED_FILES = [
     ".github/workflows/ci.yml",
 ]
 
-KEY_PHRASES = [
-    ("SKILL.md", "Fill any field with no content as `none`"),
-    ("SKILL.md", "see the naming rule in [references/authority-model.md](references/authority-model.md)"),
-    ("SKILL.md", "[references/fresh-session-test.md](references/fresh-session-test.md)"),
-    ("SKILL.md", "[examples/bootstrap/](examples/bootstrap/)"),
-    ("SKILL.md", "[fixtures/messy/](fixtures/messy/)"),
-    ("references/authority-model.md", "## Agent convention file naming"),
-    ("fixtures/README.md", "Expected outcomes after a correct REFACTOR"),
-    ("README.md", "中英混合、中文为主"),
-    ("README.md", "[MIT](LICENSE)"),
-    ("CHANGELOG.md", "## [0.1.0]"),
-    ("README.en.md", "## Three modes"),
-    ("PLUGIN.md", "Codex 用户接入"),
-    ("README.md", "OpenAI Codex"),
-    ("README.en.md", "OpenAI Codex"),
-]
-
-LINK_RE = re.compile(r"\]\(([^)#]+?)\)")
-
-# Template examples inside authority-model.md point into the TARGET project root
-# (e.g. `See [ARCHITECTURE.md](ARCHITECTURE.md)`), not into this skill. They are
-# intentional illustrations, so they are exempt from link resolution.
-EXEMPT = {
-    "references/authority-model.md": {"ARCHITECTURE.md", "relative/path.md"},
-}
-
 
 def check_required() -> list[str]:
     return [f"missing required file: {p}" for p in REQUIRED_FILES if not (ROOT / p).exists()]
 
 
 def check_links() -> list[str]:
-    problems = []
-    files = sorted((ROOT / "references").glob("*.md")) + [
-        ROOT / "SKILL.md",
-        ROOT / "examples" / "README.md",
-        ROOT / "fixtures" / "README.md",
-        ROOT / "PLUGIN.md",
-        ROOT / "README.md",
-        ROOT / "README.en.md",
-        ROOT / "CONTRIBUTING.md",
-    ]
-    for md in files:
-        text = md.read_text(encoding="utf-8")
-        text = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)  # HTML comments are not document links
-        base = md.parent
-        exempt = EXEMPT.get(md.relative_to(ROOT).as_posix(), set())
-        for m in LINK_RE.finditer(text):
-            target = m.group(1)
-            if target.startswith(("http://", "https://", "mailto:", "#")):
-                continue
-            if target in exempt:
-                continue
-            if not (base / target).resolve().exists():
-                problems.append(f"{md.relative_to(ROOT)} -> broken link: {target}")
-    return problems
+    files = [p for p in ROOT.rglob("*.md")
+             if "fixtures/messy/" not in p.relative_to(ROOT).as_posix() and ".git" not in p.parts]
+    return document_links(files)
 
 
 def check_encoding() -> list[str]:
@@ -128,20 +92,40 @@ def check_encoding() -> list[str]:
     return problems
 
 
-def check_key_phrases() -> list[str]:
+def check_metadata() -> list[str]:
     problems = []
-    for rel, phrase in KEY_PHRASES:
-        p = ROOT / rel
-        if not p.exists():
-            problems.append(f"{rel}: missing (cannot check phrase)")
-            continue
-        if phrase not in p.read_text(encoding="utf-8"):
-            problems.append(f"{rel}: missing contract phrase -> {phrase}")
+    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+    fm = re.match(r"\A---\n(.*?)\n---", skill, re.S)
+    if not fm or not re.search(r"(?m)^name: project-context-architect$", fm[1]) or not re.search(r"(?m)^description: \S", fm[1]):
+        problems.append("SKILL.md: missing or invalid name/description frontmatter")
+    try:
+        market = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))
+        plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return problems + [f"distribution JSON: {exc}"]
+    if not isinstance(market, dict) or not isinstance(plugin, dict):
+        return problems + ["distribution manifests must be JSON objects"]
+    if not market.get("name") or not isinstance(market.get("owner"), dict) or not market["owner"].get("name"):
+        problems.append("marketplace requires name and owner.name")
+    entries = market.get("plugins", [])
+    if not isinstance(entries, list) or len(entries) != 1 or not isinstance(entries[0], dict) or entries[0].get("name") != plugin.get("name") or entries[0].get("source") != "./":
+        problems.append("marketplace must reference this root plugin by matching name and ./ source")
+    if plugin.get("name") != "project-context-architect" or plugin.get("skills") != ["./"]:
+        problems.append("plugin must declare the root skill via skills: [./]")
+    version = plugin.get("version", "")
+    if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version):
+        problems.append("plugin requires a semantic version")
+    elif f"## [{version}]" not in (ROOT / "CHANGELOG.md").read_text(encoding="utf-8"):
+        problems.append("plugin version missing from CHANGELOG.md")
+    if (ROOT / "marketplace.json").exists():
+        problems.append("obsolete duplicate root marketplace.json")
     return problems
 
 
 def main() -> int:
-    failures = check_required() + check_links() + check_encoding() + check_key_phrases()
+    failures = check_required()
+    if not failures:
+        failures = check_links() + check_encoding() + check_metadata()
     if failures:
         for f in failures:
             print(f"FAIL: {f}")

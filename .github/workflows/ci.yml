@@ -12,7 +12,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Lint skill structure (required files, links, encoding, contract phrases)
+      - name: Lint skill structure (files, anchors, encoding, package metadata)
         run: python scripts/lint_skill.py
       - name: Verify fixture is still deliberately broken
         run: python scripts/check_fixture.py
+      - name: Regression tests for preservation and navigation
+        run: python -B -m unittest discover -s scripts -p "test_*.py" -v
+      - name: Check the self-contained example as a real project
+        run: python -B scripts/check_project_context.py examples/bootstrap --strict-warnings

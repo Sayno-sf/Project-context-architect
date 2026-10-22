@@ -1,63 +1,42 @@
-# 插件市场接入（Plugin Distribution）
+# 插件分发
 
-本 skill 已按 Claude Code 插件规范补齐市场接入资产。根目录 `SKILL.md` 即插件主 skill（`skills: ["."]` 指向仓库根）。
+本目录同时提供可直接安装的 skill 和 Claude Code plugin。两条安装路径分别验证，不能以自检通过代替平台安装成功。
 
-## 接入方式
+## Codex 用户接入
 
-### 1. 官方目录（推荐，面向大众分发）
+在支持本地 skills 的 Codex 中，请求内置 skill-installer 从以下仓库安装，或将完整目录复制到该环境的 skills 目录，目录名使用 `project-context-architect`：
 
-提交到 [Anthropic 官方插件目录](https://github.com/anthropics/claude-plugins-official) 的 `external_plugins/`：
+[GitHub 仓库](https://github.com/lhq418899-sketch/Project-context-architect)
 
-1. 将仓库公开到 GitHub，许可证选 MIT（本 skill 默认声明 MIT）；
-2. 确认 `marketplace.json` 与 `.claude-plugin/plugin.json` 中的账号信息为 `lhq418899-sketch`；
-3. 通过官方[插件目录提交表单](https://clau.de/plugin-directory-submission)提交，附仓库 URL；
-4. 审核通过后，用户可 `claude plugin install project-context-architect@claude-plugins-official` 安装。
+保留 `SKILL.md`、`references/`、`examples/` 和 `agents/openai.yaml`。执行回归时保留完整仓库。托管 ChatGPT 与本地 Codex 的安装能力不同；不承诺任意账号都能通过 Plugins 界面安装此仓库。
 
-### 2. 自建 marketplace（面向团队内部）
+## Claude Code marketplace
 
-仓库本身就是 marketplace：
+唯一清单位于 [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)，含市场名称、owner 和相对仓库根的插件源 `./`。插件清单 [.claude-plugin/plugin.json](.claude-plugin/plugin.json) 自己声明根目录 skill，不依赖 marketplace 额外补齐。
 
 ```bash
 claude plugin marketplace add lhq418899-sketch/Project-context-architect
 claude plugin install project-context-architect@project-context-architect-marketplace
 ```
 
-### 3. 本地安装（面向自己）
+这些命令读取 GitHub 版本；本地修改必须发布后才影响该安装路径。
+
+## 本地验证与试载
+
+已安装 Claude Code 时，在仓库根执行：
 
 ```bash
-claude plugin install C:\path\to\project-context-architect
+claude plugin validate .
+claude --plugin-dir .
 ```
 
-### 4. Codex 用户接入（面向 OpenAI Codex / ChatGPT）
+随后确认 skill 被发现并执行一个只读 CHECK。发布者应使用隔离配置测试完整 marketplace 添加/安装过程，记录平台版本与结果。平台验证会检查其支持的格式；本仓库 lint 只检查已使用的配置结构。
 
-本 skill 采用跨平台通用 skill 格式（`SKILL.md` + 资源子目录），Codex 与 Claude Code 均原生兼容。`agents/openai.yaml` 即 Codex 侧接口配置（`display_name` / `short_description` / `default_prompt` / `allow_implicit_invocation`）。
+官方参考：[创建 marketplace](https://code.claude.com/docs/en/plugin-marketplaces)、[插件清单](https://code.claude.com/docs/en/plugins-reference)。向官方目录提交是独立发布步骤，GitHub 公开不代表已获官方收录。
 
-方式 A（推荐，官方 skill-installer，从 GitHub 安装到 `$CODEX_HOME/skills`）：
+## 发布前检查
 
-```text
-在 Codex 中执行：
-/use skill-installer "Install the project-context-architect skill from https://github.com/lhq418899-sketch/Project-context-architect"
-```
-
-方式 B（手动复制）：把整个 `project-context-architect/` 目录（含 `SKILL.md` 及 `references/`、`examples/`、`fixtures/`、`scripts/` 子目录）复制到 `~/.codex/skills/`（即 `$CODEX_HOME/skills`），目录名保持不变。
-
-方式 C（界面）：ChatGPT / Codex 的 Plugins 入口中安装（视账号可用性）。
-
-Codex 侧无需 Claude 的 marketplace 命令；两套分发互不干扰。
-
-## 结构映射（Claude 插件规范）
-
-| 本仓库路径 | 插件规范对应 |
-|---|---|
-| `SKILL.md`（根） | `skills/` 主 skill，经 `skills: ["."]` 声明 |
-| `references/` `examples/` `fixtures/` `scripts/` | skill 资源目录，随仓库分发 |
-| `agents/openai.yaml` | Codex 侧接口配置，与 Claude 插件互不干扰 |
-| `.claude-plugin/plugin.json` | 插件元数据（必需） |
-
-## 发布前 Checklist
-
-- [ ] 仓库已公开，含 LICENSE（MIT）
-- [ ] `marketplace.json` / `.claude-plugin/plugin.json` 占位已替换
-- [ ] 已运行 `python scripts/lint_skill.py`（结构自检）
-- [ ] 已运行 `python scripts/check_fixture.py`（夹具前提完好）
-- [ ] README 写明用法（BOOTSTRAP / REFACTOR / CHECK 三模式）
+- 运行 [回归脚本](scripts/README.md)，检查示例链接和保全反例。
+- 依照 [行为演练](fixtures/README.md) 核验只读、漂移与交接行为。
+- 验证实际安装/加载路径；未执行的项目明确标为未验证。
+- 插件版本与 CHANGELOG 一致，避免修改后仍使用旧缓存版本。

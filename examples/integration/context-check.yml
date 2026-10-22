@@ -1,0 +1,26 @@
+# Merge into the target project's existing CI only when integration is requested.
+# Requires both checker files in tools/context/ and an adapted root config.
+name: Project context
+on:
+  pull_request:
+  push:
+jobs:
+  context-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check authority documents
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          args=(. --config context-check.json)
+          if [ -n "$BASE_REF" ]; then
+            args+=(--baseline-ref "$BASE_REF")
+          fi
+          python -B tools/context/check_project_context.py "${args[@]}"

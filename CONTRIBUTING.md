@@ -4,19 +4,21 @@
 
 ## 本地开发
 
-无需安装任何依赖，Python 3.x 即可（脚本为纯标准库）：
+无需安装任何依赖，Python 3.10+ 即可（脚本为纯标准库）：
 
 ```bash
-python scripts/lint_skill.py          # 结构自检：必需文件、链接、编码、契约措辞
+python scripts/lint_skill.py          # 结构自检：必需文件、链接、编码、发布配置
 python scripts/check_fixture.py       # 确认演练夹具仍处于"故意损坏"状态
+python -B -m unittest discover -s scripts -p "test_*.py"
 ```
 
 ## 修改纪律
 
 1. **先读再改**：改动涉及权威模型 / 三模式时，先读 [SKILL.md](SKILL.md) 与 [references/authority-model.md](references/authority-model.md)，保持概念一致性（一事实一主、当前真相与历史分离、权威完成门）。
-2. **脚本只做结构断言**：`scripts/` 只检查确定性结构；语义级验收（fresh-session 7 问、冲突消解质量、报告字段）由 agent 在对话中完成。新增结构性约束时，请同步更新 `lint_skill.py` 的 `REQUIRED_FILES` / `KEY_PHRASES`。
-3. **夹具勿在原位重构**：演练 REFACTOR 时先复制 `fixtures/messy/` 到临时目录，验证后删除。
-4. **发布文件属于仓库**：`README.md`、`LICENSE`、`CHANGELOG.md` 等发布配套是仓库一部分，删除或改名需在 PR 中说明理由。
+2. **脚本只做结构断言**：`scripts/` 只检查确定性结构；语义级验收（fresh-session 7 问、冲突消解质量、报告字段）由 agent 在对话中完成。新增确定性检查时，增加会失败的反例；不要用固定措辞匹配代替行为验证。
+3. **真实项目检查**：`check_project_context.py` 必须保持只读、有界且不跟随项目外链接。新增启发式只产生复核提示，不自动改写权威；测试覆盖正确输入、错误输入和读取边界。
+4. **夹具勿在原位重构**：演练 REFACTOR 时先复制 `fixtures/messy/` 到临时目录，验证后删除。
+5. **发布文件属于仓库**：`README.md`、`LICENSE`、`CHANGELOG.md` 等发布配套是仓库一部分，删除或改名需在 PR 中说明理由。
 
 ## 提 PR
 

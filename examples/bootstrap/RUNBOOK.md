@@ -1,21 +1,23 @@
-> Example artifact from a fictional project (`remindr`). Not part of this skill.
+> Fictional example (`remindr`). Verification labels demonstrate format only; these commands were not executed by this skill repository.
 
-# RUNBOOK
-
-Commands verified against a clean checkout on 2026-10-09 unless marked unverified.
+# Runbook
 
 ## Setup
-- `python -m venv .venv` then activate — verified on Windows and macOS.
-- `pip install -r requirements.txt` — verified.
+
+Python 3.11+, Flask and PyYAML. Create a virtual environment with `python -m venv .venv`, activate it using the platform's command, then run `pip install -r requirements.txt`.
 
 ## Run
-- `python summarize.py digest reminders/ --out digest.txt` — verified.
-- `python app.py --port 8080` — verified (local only).
+
+- CLI: `python summarize.py digest reminders/ --out digest.txt`.
+- Local web: `python app.py --port 8080`; bind only to localhost.
 
 ## Test
-- `python -m pytest tests/` — verified, 34 passing.
-- (unverified) `python -m pytest --cov=summarize` — coverage plugin not yet installed.
+
+- Offline: `python -m pytest tests/`.
+- Coverage is unverified and requires a separately installed coverage plugin.
+
+In the fictional scenario, the basic commands above were exercised locally; this is not evidence of a running deployment. Current limitations live in [Known Issues](PROJECT_STATE.md#known-issues).
 
 ## Common failures
-- YAML parse error: source file uses tabs; convert to spaces (see ADR-002 in DECISIONS.md).
-- Port 8080 busy: pass `--port`; do not edit `app.py` for a local run.
+
+YAML parse failure: check indentation and tabs. Port 8080 busy: choose a free local port with `--port`.

@@ -1,0 +1,13 @@
+{
+  "name": "project-context-architect-marketplace",
+  "owner": {
+    "name": "lhq418899-sketch"
+  },
+  "plugins": [
+    {
+      "name": "project-context-architect",
+      "source": "./",
+      "description": "Establish and maintain a project's smallest authoritative context: handoff docs, authority refactor, and fresh-session readiness checks."
+    }
+  ]
+}
