@@ -1,6 +1,6 @@
 ---
 name: project-context-architect
-description: Establish and maintain a project's smallest authoritative context. Use to create handoff docs, reconcile stale project facts, consolidate conflicting documentation, or check fresh-session readiness. Manages project context, not business implementation.
+description: Maintain file-based project context across sessions and agent handoffs. Use when resuming a project in a new chat, handing work to another coding agent, fixing stale documentation or conflicting TODOs, or organizing AGENTS.md and project state, architecture, and runbook docs. Manages project context, not business implementation.
 ---
 
 # Project Context Architect

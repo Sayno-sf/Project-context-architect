@@ -2,7 +2,7 @@
 
 **让 AI 编程助手在新会话中更快接上项目。**
 
-整理项目目标、当前工作、架构入口和运行说明，清理过期状态；日常更新只核对受影响的内容。
+维护跨对话的项目上下文（cross-session project context），支持跨 Agent 交接（agent handoff），修正文档漂移（documentation drift）；日常更新只核对受影响的内容。
 
 **中文** | [English](README.en.md)
 
@@ -14,6 +14,7 @@
 这是一个供支持本地 skills 的 AI 编程助手使用的 skill。适合这些情况：
 
 - **新会话接不上进度**：每次都要重新解释项目做什么、做到哪里、接下来做什么。
+- **换 Agent 接手**：另一个平台的助手需要找到当前状态、已验证的工作和下一步，而不是重新阅读全部聊天历史。
 - **文档互相矛盾**：功能已经完成，旧 TODO、问题清单或交接摘要仍然写着“待实现”。
 - **项目资料越积越多**：当前规则、历史方案和临时笔记混在一起，不知道该信哪份。
 
@@ -22,6 +23,22 @@
 ## 安装
 
 选择你使用的平台。默认安装**完整仓库目录**，保留内部结构；直接安装 skill 时，目录名使用 `project-context-architect`。
+
+### 通用 Skills CLI
+
+已安装 Node.js/npm 时，可通过 Skills CLI 安装。按提示选择支持的 Agent 和安装范围；实际加载方式仍取决于该 Agent。
+
+```bash
+npx skills add Sayno-sf/Project-context-architect --skill project-context-architect
+```
+
+只查看仓库能识别出哪些 skill，不安装：
+
+```bash
+npx skills add Sayno-sf/Project-context-architect --list
+```
+
+请核对来源为 **`Sayno-sf/Project-context-architect`**，避免与其他仓库的同名 skill 混淆。目录检索是否返回本仓库，与 GitHub 直接安装是两项独立检查；维护者可按[检索检查说明](PLUGIN.md#discovery-checks)复核。
 
 ### Codex
 

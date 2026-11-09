@@ -1,6 +1,6 @@
 interface:
   display_name: "Project Context Architect"
-  short_description: "建立、整理并检查跨项目可复用的最小权威上下文体系"
-  default_prompt: "Use $project-context-architect to establish the smallest authoritative context for this project."
+  short_description: "跨对话恢复项目进度、跨 Agent 接力，并清理过期文档状态"
+  default_prompt: "Use $project-context-architect to prepare current project context for a new session or agent handoff, checking stale status against available evidence."
 policy:
   allow_implicit_invocation: true

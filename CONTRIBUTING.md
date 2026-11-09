@@ -22,7 +22,7 @@ python -B -m unittest discover -s scripts -p "test_*.py"
 
 ## 提 PR
 
-1. 先在 [Issues](https://github.com/lhq418899-sketch/Project-context-architect/issues) 说明意图（改动类型、影响面），避免重复劳动。
+1. 先在 [Issues](https://github.com/Sayno-sf/Project-context-architect/issues) 说明意图（改动类型、影响面），避免重复劳动。
 2. 分支命名建议：`fix/`、`feat/`、`docs/` 前缀。
 3. 提交前本地跑通上述脚本 + `verify_refactor.py` 对演练副本的验收。
 4. PR 描述写清：改了什么、为什么、验证方式。

@@ -1,9 +1,10 @@
 # 验证脚本
 
-Python 3.10+，仅标准库；验证脚本只读，回归测试仅操作自动清理的临时目录。
+Python 3.10+，仅标准库；验证脚本只读，回归测试仅操作自动清理的临时目录。`check_discovery.py --online` 额外读取公开 GitHub 元数据和 skills.sh 搜索结果。
 
 ```bash
 python -B scripts/lint_skill.py
+python -B scripts/check_discovery.py
 python -B scripts/check_fixture.py
 python -B -m unittest discover -s scripts -p "test_*.py" -v
 ```
@@ -12,6 +13,12 @@ python -B -m unittest discover -s scripts -p "test_*.py" -v
 - `check_fixture.py`：确认原夹具仍然故意损坏，未被误当成真实项目整理。
 - `verify_refactor.py <dir>`：仅验收 **fixtures/messy 的重构副本**。逐项核对四份历史材料、保留正文、所有非 Markdown 原件（包括测试及依赖）的字节、协议所有者、章节与链接。不能用于任意项目。
 - `test_validation.py`：验证正确样例通过，同时拒绝档案丢失、正文丢失、代码改动、测试删除、失效链接等反例。
+
+## 发布发现检查
+
+`check_discovery.py` 默认离线检查本 skill 的名称/描述、规范来源、仓库元数据配置，以及中英文安装入口。使用 `--online` 只读查询 GitHub 与 skills.sh；同名结果必须匹配仓库，网络失败与未命中分开报告。使用 `--json` 输出机器可读结果。它不安装 skill，也不评估 Agent 的实际触发效果。
+
+`test_discovery.py` 用模拟公开接口响应覆盖同名碰撞、大小写、空结果、错误响应和失败退出码；不依赖线上排名。联网入口、可选严格门槛和结果解释见 [PLUGIN.md](../PLUGIN.md#discovery-checks)。
 
 ## 检查真实项目
 

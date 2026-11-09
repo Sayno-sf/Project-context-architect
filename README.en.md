@@ -2,7 +2,7 @@
 
 **Help AI coding assistants pick up a project in a new session.**
 
-Keep project goals, current work, architecture entry points and operating instructions up to date. Retire stale status claims; review only affected content during routine updates.
+Maintain cross-session project context, support cross-agent handoffs, and fix documentation drift. Keep project state, architecture entry points and runbooks current; review only affected content during routine updates.
 
 [中文](README.md) | **English**
 
@@ -14,6 +14,7 @@ Keep project goals, current work, architecture entry points and operating instru
 This is a skill for AI coding assistants that support local skills. Use it when:
 
 - **New sessions lose the thread:** you keep explaining what the project does, where it stands and what comes next.
+- **Another agent takes over:** an assistant on another platform needs current project state, verified work and next steps without replaying the entire chat history.
 - **Documents disagree:** a feature is complete, but an old TODO, issue list or handoff summary still says it is pending.
 - **Project notes keep accumulating:** current rules, past proposals and working notes are mixed together, with no clear source to trust.
 
@@ -22,6 +23,22 @@ The skill gives current facts a small set of clearly owned project files. Other 
 ## Install
 
 Choose your platform. Install the **complete repository directory**, preserving its contents. For a direct skill installation, name the directory `project-context-architect`.
+
+### Universal Skills CLI
+
+With Node.js/npm installed, use the Skills CLI. Choose a supported agent and installation scope when prompted; actual skill loading depends on that agent.
+
+```bash
+npx skills add Sayno-sf/Project-context-architect --skill project-context-architect
+```
+
+List the skills discoverable in the repository without installing:
+
+```bash
+npx skills add Sayno-sf/Project-context-architect --list
+```
+
+Verify the source is **`Sayno-sf/Project-context-architect`**, not a similarly named skill from another repository. Directory search visibility and direct GitHub installation are separate checks; see the maintainer [discovery checks](PLUGIN.md#discovery-checks).
 
 ### Codex
 

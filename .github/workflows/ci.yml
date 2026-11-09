@@ -14,6 +14,8 @@ jobs:
           python-version: "3.11"
       - name: Lint skill structure (files, anchors, encoding, package metadata)
         run: python scripts/lint_skill.py
+      - name: Check skill discovery metadata and install entrypoints (offline)
+        run: python -B scripts/check_discovery.py
       - name: Verify fixture is still deliberately broken
         run: python scripts/check_fixture.py
       - name: Regression tests for preservation and navigation

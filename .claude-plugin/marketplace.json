@@ -7,7 +7,7 @@
     {
       "name": "project-context-architect",
       "source": "./",
-      "description": "Establish and maintain a project's smallest authoritative context: handoff docs, authority refactor, and fresh-session readiness checks."
+      "description": "Agent skill for cross-session project context, cross-agent handoffs, and keeping project documentation current."
     }
   ]
 }

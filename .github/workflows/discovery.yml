@@ -1,0 +1,26 @@
+name: skill-discovery
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Read-only metadata and search checks
+        run: python -B scripts/check_discovery.py --online --json > discovery-report.json
+      - name: Show the result (NOT_FOUND is diagnostic, not successful indexing)
+        if: always()
+        run: cat discovery-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: skill-discovery-report
+          path: discovery-report.json

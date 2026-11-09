@@ -1,6 +1,16 @@
 # 插件分发
 
-本目录同时提供可直接安装的 skill 和 Claude Code plugin。两条安装路径分别验证，不能以自检通过代替平台安装成功。
+本目录同时提供可直接安装的 skill 和 Claude Code plugin。各安装路径分别验证，不能以自检通过代替平台安装成功。
+
+## 通用 Skills CLI
+
+需要 Node.js/npm。来源和 skill 名称显式指定，避免同名结果：
+
+```bash
+npx skills add Sayno-sf/Project-context-architect --skill project-context-architect
+```
+
+按 CLI 提示选择 Agent 和安装范围。`--list` 仅枚举，不安装；能枚举不代表目标 Agent 已成功加载。CLI 的具体支持范围以[官方说明](https://github.com/vercel-labs/skills)为准。
 
 ## Codex 用户接入
 
@@ -40,3 +50,27 @@ claude --plugin-dir .
 - 依照 [行为演练](fixtures/README.md) 核验只读、漂移与交接行为。
 - 验证实际安装/加载路径；未执行的项目明确标为未验证。
 - 插件版本与 CHANGELOG 一致，避免修改后仍使用旧缓存版本。
+
+<a id="discovery-checks"></a>
+## 发现与检索检查（维护者）
+
+这些检查用于发布本 skill，不是用户项目的日常维护流程。仓库简介和 Topics 的期望值保存在 [.github/repository-metadata.json](.github/repository-metadata.json)，并在 GitHub About 中维护；文件本身不会自动修改远端设置。
+
+```bash
+# 离线：名称、描述、来源、两份 README 的通用安装入口
+python -B scripts/check_discovery.py
+# 只读联网：核对 GitHub 元数据；精确作者搜索及场景词搜索
+python -B scripts/check_discovery.py --online --json
+# 确需把精确检索命中作为门槛时使用
+python -B scripts/check_discovery.py --online --require-listed
+# 独立确认 GitHub 仓库能被实际 CLI 枚举（不安装）
+npx skills add Sayno-sf/Project-context-architect --list
+```
+
+输出区分 `PASS`、`FAIL`、`NOT_FOUND`、`UNAVAILABLE`。搜索只在返回结果中按**仓库来源与 skill 标识**匹配；其他仓库的同名项不算通过。未命中不证明目录中绝对不存在，更不能证明 skill 无法直接安装。HTTP 错误、超时、响应格式变化标为 `UNAVAILABLE`，不当作零结果。
+
+退出码：`0` 表示已执行的硬性检查通过（可包含非阻塞 `NOT_FOUND`）；`1` 表示本地/远端元数据不一致或显式要求的精确检索未命中；`2` 表示联网检查未能完成。场景词排名是诊断项，不做强制排名断言。普通 CI 只跑离线检查与模拟响应回归；GitHub Actions 的 **skill-discovery** 工作流可手动运行线上检查并下载 JSON 报告，不定时轮询、不自动安装或制造安装量。
+
+[skills.sh 官方说明](https://skills.sh/docs/faq)称，用户通过 Skills CLI 安装产生的遥测会推动目录收录和排名；可用环境变量 `DISABLE_TELEMETRY=1` 关闭 CLI 遥测。没有即时收录或排名保证。本脚本只发出公开元数据/搜索 GET 请求，不安装、不发送安装事件。检索接口沿用[官方 CLI 的查询入口](https://github.com/vercel-labs/skills/blob/main/src/find.ts)，第三方接口变化可能需要调整。
+
+安装后的选择另行做自然语言试用：例如“准备让另一个 Agent 接手，整理一下当前进度”和“已经修好了，文档却还写着待修复”。也检查普通业务代码请求不会被错误引导为文档重构。它属于行为评估，脚本不以关键词匹配冒充触发准确率。

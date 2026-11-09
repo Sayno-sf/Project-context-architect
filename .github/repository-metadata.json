@@ -1,0 +1,11 @@
+{
+  "description": "Agent skill for cross-session project context, cross-agent handoffs, and keeping project documentation current.",
+  "topics": [
+    "agent-skills",
+    "context-management",
+    "agent-handoff",
+    "ai-coding",
+    "documentation",
+    "agents-md"
+  ]
+}
