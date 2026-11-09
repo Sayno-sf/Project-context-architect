@@ -38,6 +38,6 @@ Complete [Current Work](#current-work), then request review. Do not mark the web
 
 - Identity, delivery and work: [Project](#project), [Current Status](#current-status), [Current Work](#current-work).
 - Composition and entry points: [Architecture](ARCHITECTURE.md).
-- Constraints: [Project rules](AGENTS.md#project-rules), [Non-goals](#non-goals).
+- Constraints: [Project rules](../AGENTS.md#project-rules), [Non-goals](#non-goals).
 - Outstanding work and stopping point: [Known Issues](#known-issues), [Next](#next).
 - Commands: [Runbook](RUNBOOK.md); enduring rationale: [Decisions](DECISIONS.md).

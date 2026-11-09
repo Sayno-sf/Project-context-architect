@@ -6,7 +6,7 @@
 
 **中文** | [English](README.en.md)
 
-[![CI](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml)
+[![CI](https://github.com/Sayno-sf/Project-context-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/Sayno-sf/Project-context-architect/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 什么时候用
@@ -29,7 +29,7 @@
 
 ```text
 使用 skill-installer，从以下仓库的根目录安装 project-context-architect：
-https://github.com/lhq418899-sketch/Project-context-architect
+https://github.com/Sayno-sf/Project-context-architect
 保留完整目录。如果已经安装，先备份旧版再更新，并告诉我实际安装位置。
 ```
 
@@ -38,13 +38,13 @@ https://github.com/lhq418899-sketch/Project-context-architect
 在终端运行：
 
 ```bash
-claude plugin marketplace add lhq418899-sketch/Project-context-architect
+claude plugin marketplace add Sayno-sf/Project-context-architect
 claude plugin install project-context-architect@project-context-architect-marketplace
 ```
 
 ### 其他支持本地 skills 的助手
 
-从 [Releases](https://github.com/lhq418899-sketch/Project-context-architect/releases) 下载源码包并解压，将完整目录命名为 `project-context-architect`，放进该助手支持的 skills 目录。具体加载方式取决于平台。
+从 [Releases](https://github.com/Sayno-sf/Project-context-architect/releases) 下载源码包并解压，将完整目录命名为 `project-context-architect`，放进该助手支持的 skills 目录。具体加载方式取决于平台。
 
 安装后确认助手能找到这个 skill，再打开目标项目使用。更多安装与验证说明见 [PLUGIN.md](PLUGIN.md)。
 
@@ -80,19 +80,23 @@ claude plugin install project-context-architect@project-context-architect-market
 
 例如，修复已验证后，相关问题清单和下一步不应继续写“待修复”；上线状态仍需要对应的部署证据。日常小更新不要求每次重读整份文件或执行完整交接检查。
 
+## 跨平台接力
+
+你明确让另一个平台的 Agent 接手时，它承接当前任务的整合职责，读取现有状态和可用工作总结，只核对相关变化。无需 Git、额外角色文件或重复完整验收。确实并行时，简短约定各自文件范围和一位整合者；同一文件避免同时修改。这是轻量协作约定，不是强制锁机制。
+
 ## 会生成或维护什么
 
-具体文件取决于项目已有约定。常见分工如下：
+项目上下文默认集中到 `.architect/`，根目录保留 `AGENTS.md` 等平台入口和 `README.md`。常见分工如下：
 
 | 文件 | 负责说明 |
 |---|---|
 | `AGENTS.md` 或现有同类入口 | 协作规则，以及新会话先读什么 |
-| `PROJECT_STATE.md` | 当前状态、正在做的事、已知问题和下一步 |
-| `ARCHITECTURE.md` | 当前组件、入口、数据流和职责边界 |
-| `RUNBOOK.md` | 环境、启动、测试和排查方法 |
-| `DECISIONS.md` | 值得长期保留的决策理由 |
+| `.architect/PROJECT_STATE.md` | 当前状态、正在做的事、已知问题和下一步 |
+| `.architect/ARCHITECTURE.md` | 当前组件、入口、数据流和职责边界 |
+| `.architect/RUNBOOK.md` | 环境、启动、测试和排查方法 |
+| `.architect/DECISIONS.md` | 值得长期保留的决策理由 |
 
-新项目从协作入口和当前状态开始；其他文件有实质内容才建立。已有文件名和结构合理时会继续使用。历史资料保留并标明用途，交接摘要优先使用链接，避免再维护一份相同状态。
+新项目从协作入口和当前状态开始；其他文件有实质内容才建立。整理时将相关上下文集中到 `.architect/`，修正链接并保留项目规则。历史资料放入 `.architect/history/` 并标明用途，交接摘要优先使用链接，避免再维护一份相同状态。
 
 想看具体样子，可以打开[虚构项目示例](examples/bootstrap/)。其中的功能和验证结果仅用于演示文档写法。
 

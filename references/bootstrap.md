@@ -28,17 +28,17 @@ Ask only what the evidence cannot answer; never ask what the repository already 
 Read [authority-model.md](authority-model.md); consult a relevant [example](../examples/bootstrap/) only if the desired shape is unclear. Create or adapt:
 
 1. the agent convention file (`AGENTS.md` by default; reuse a platform equivalent the project already maintains — see the naming rule in authority-model.md)
-2. `PROJECT_STATE.md`
+2. `.architect/PROJECT_STATE.md`
 
 Create the following only when their authority category already has substantive content:
 
-- `ARCHITECTURE.md` — meaningful implemented components, boundaries, ownership, data flow, or codebase map need a dedicated owner;
-- `DECISIONS.md` — at least one accepted decision has durable rationale worth preserving;
-- `RUNBOOK.md` — real environment, start, test, build, validation, or debugging instructions exist.
+- `.architect/ARCHITECTURE.md` — meaningful implemented components, boundaries, ownership, data flow, or codebase map need a dedicated owner;
+- `.architect/DECISIONS.md` — at least one accepted decision has durable rationale worth preserving;
+- `.architect/RUNBOOK.md` — real environment, start, test, build, validation, or debugging instructions exist.
 
-Keep initial files short. Represent a missing category through absence, not an empty document created for symmetry. `PROJECT_STATE.md` may point only to authority files that exist.
+Keep initial files short. Represent a missing category through absence, not an empty document created for symmetry. `.architect/PROJECT_STATE.md` may point only to authority files that exist.
 
-Create an optional authority document only when the evidence already demonstrates its need. Keep current work in `PROJECT_STATE.md` unless a substantial execution contract justifies `CURRENT_SPRINT.md`.
+Create an optional authority document only when the evidence already demonstrates its need. Keep current work in `.architect/PROJECT_STATE.md` unless a substantial execution contract justifies `.architect/CURRENT_SPRINT.md`.
 
 In the project-root convention file, adapt the two protocols from [authority-model.md](authority-model.md): read-on-demand orientation and incremental write-back, with the seven questions reserved for full handoff checks. Preserve existing project rules and keep root protocols out of nested copies.
 
@@ -52,8 +52,8 @@ Run the fresh-session test from [fresh-session-test.md](fresh-session-test.md). 
 - every conditional authority file has substantive content that justifies its existence;
 - the root agent convention file preserves existing working rules and contains one copy each of the new-session and authority-maintenance protocols;
 - the maintenance protocol permits no-op tasks to leave authority documents untouched and requires affected authority to be current before completion;
-- `PROJECT_STATE.md` distinguishes implemented capabilities from plans;
-- an existing `RUNBOOK.md` labels commands accurately as verified or unverified;
+- `.architect/PROJECT_STATE.md` distinguishes implemented capabilities from plans;
+- an existing `.architect/RUNBOOK.md` labels commands accurately as verified or unverified;
 - links among authority files resolve.
 
 BOOTSTRAP is complete only when the minimum authority is usable today and contains no invented future state.

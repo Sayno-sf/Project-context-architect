@@ -6,7 +6,7 @@
 
 在支持本地 skills 的 Codex 中，请求内置 skill-installer 从以下仓库安装，或将完整目录复制到该环境的 skills 目录，目录名使用 `project-context-architect`：
 
-[GitHub 仓库](https://github.com/lhq418899-sketch/Project-context-architect)
+[GitHub 仓库](https://github.com/Sayno-sf/Project-context-architect)
 
 保留 `SKILL.md`、`references/`、`examples/` 和 `agents/openai.yaml`。执行回归时保留完整仓库。托管 ChatGPT 与本地 Codex 的安装能力不同；不承诺任意账号都能通过 Plugins 界面安装此仓库。
 
@@ -15,7 +15,7 @@
 唯一清单位于 [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)，含市场名称、owner 和相对仓库根的插件源 `./`。插件清单 [.claude-plugin/plugin.json](.claude-plugin/plugin.json) 自己声明根目录 skill，不依赖 marketplace 额外补齐。
 
 ```bash
-claude plugin marketplace add lhq418899-sketch/Project-context-architect
+claude plugin marketplace add Sayno-sf/Project-context-architect
 claude plugin install project-context-architect@project-context-architect-marketplace
 ```
 

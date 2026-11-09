@@ -4,7 +4,7 @@ Inspect the requested context without changing it. Use a bounded check for a nam
 
 ## Inspect proportionally
 
-Use L0 Orientation (`AGENTS.md` and `PROJECT_STATE.md`, or established equivalents) and follow only the L1 pointers needed for the scope. Reuse already-read context. For a disputed claim, apply [category-aware verification](authority-model.md#category-aware-conflict-verification).
+Use L0 Orientation (`AGENTS.md` and `.architect/PROJECT_STATE.md`, or established equivalents) and follow only the L1 pointers needed for the scope. Reuse already-read context. For a disputed claim, apply [category-aware verification](authority-model.md#category-aware-conflict-verification).
 
 Look for defects relevant to the request:
 

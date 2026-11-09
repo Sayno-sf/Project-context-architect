@@ -12,12 +12,12 @@
 
 L0 Orientation — read first:
 1. [AGENTS.md](AGENTS.md)
-2. [PROJECT_STATE.md](PROJECT_STATE.md)
+2. [PROJECT_STATE.md](.architect/PROJECT_STATE.md)
 
 L1 Task Context — then read only what the task requires:
-- architecture → [ARCHITECTURE.md](ARCHITECTURE.md)
-- rationale → [DECISIONS.md](DECISIONS.md)
-- operation → [RUNBOOK.md](RUNBOOK.md)
+- architecture → [ARCHITECTURE.md](.architect/ARCHITECTURE.md)
+- rationale → [DECISIONS.md](.architect/DECISIONS.md)
+- operation → [RUNBOOK.md](.architect/RUNBOOK.md)
 
 Load history and broad source trees only when the current task provides a reason.
 
@@ -34,6 +34,12 @@ Apply during authorized work that changes project facts. Read-only review report
 5. At the end of a coherent batch, inspect the diff, changed claims, dependent summaries and links. Run the documented project check if required by the workflow; review relevant findings without treating mechanical PASS as truth. Report unrelated failures separately; do not claim the whole scan passed. No per-write check or repeated unchanged report is needed.
 
 Use existing owners: status/work/issues/Next in project state; mechanisms in architecture; repeatable commands in the runbook; durable rationale in decisions; constraints in their established rule owner. Create a separate owner only when its content warrants one. Keep handoff pointers compact rather than duplicating current status.
+
+### Cross-platform relay
+
+- **Take over naturally.** When the user asks another agent to continue, that agent takes integration responsibility for the current task. Use existing project state and available work summaries; keep verified results, unfinished work and Next current when handing off. Do not assume access to another platform's chat or require a separate handoff artifact.
+- **Check relevant changes.** Compare task-relevant claims with current files. Expand only for contradictions, missing evidence or other writers' changes. Reuse applicable verification when its inputs and environment have not changed; do not repeat all prior tests or the full handoff review merely because the platform changed. Git is optional.
+- **Coordinate only actual parallel work.** Briefly agree distinct file scopes and one integrator. Executors may update their scoped technical docs; the integrator reconciles overall state. If scopes overlap, agree one writer or sequence the edits. Sequential work needs no registration, lock, role file or extra approval. These are cooperation rules, not enforced concurrency protection.
 
 ### Full handoff check
 

@@ -7,6 +7,8 @@ description: Establish and maintain a project's smallest authoritative context. 
 
 Keep a small, current authority set: one fact per owner, links from summaries, history clearly separated. An explicit current user decision can supersede stale authority; record it in the owner during authorized maintenance. Old chat history is not current authority.
 
+Default to `.architect/` for project state, architecture, operations, decisions and context history. Keep the project's agent entry file at its discoverable root location and link into that folder. Create only documents with substantive content; keep `.architect/` versioned when the project uses version control.
+
 ## Choose the scope
 
 **Routine maintenance is the default for a bounded update.** Read the affected owner section, verify the new evidence, find dependent summaries, replace stale claims, and check the diff and links. Follow [incremental maintenance](references/maintenance.md). Do not turn a small update into a repository audit or require a full handoff test.
@@ -26,6 +28,7 @@ Honor explicit scope. A finding may justify a wider inspection; it does not auth
 - Change context artifacts within the request. Preserve business behavior, user instructions and unrelated edits. Before moving or substantially rewriting a document, inspect relevant runtime/load/build consumers and inbound links. Archive valuable history recoverably.
 - Replace current claims in their owner and retire affected stale summaries. Leave unchanged facts alone. Commands belong in the runbook; durable rationale belongs in decisions. Do not create empty owners, per-task logs or permanent fact ledgers for compliance.
 - Check once per coherent batch of changes, not after each file write. Expand reading when ownership, evidence or dependencies are unclear; stop expanding once the affected claims are reconciled. A bounded check cannot establish whole-project readiness.
+- Support cross-platform work through lightweight relay: the agent the user asks to take over handles integration for the current task, checks relevant changes and continues from existing state. Only known parallel work needs agreed file scopes and one integrator. Follow [relay guidance](references/maintenance.md#cross-platform-relay); do not introduce task boards, locks or approval steps for routine work.
 
 ## Completion and reporting
 

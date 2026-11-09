@@ -15,7 +15,7 @@ python -B -m unittest discover -s scripts -p "test_*.py" -v
 
 ## 检查真实项目
 
-`check_project_context.py` 适用于实际项目，默认只读指定权威文件，不扫描整个仓库，不追随仓库外链接。
+`check_project_context.py` 适用于实际项目，默认只读根目录 Agent 入口及 `.architect/` 内的指定权威文件，不扫描整个仓库，不追随仓库外链接。
 
 ```bash
 python -B scripts/check_project_context.py /path/to/project

@@ -16,10 +16,10 @@
 
 ## Expected outcomes after a correct REFACTOR
 
-- 根目录 Markdown 保留 `README.md` 与权威文件（agent 约定文件——`AGENTS.md` 或项目已在用的平台等价文件——以及 `PROJECT_STATE.md`；`ARCHITECTURE.md` / `RUNBOOK.md` / `DECISIONS.md` 仅在确有内容时保留）。
+- 根目录保留 `README.md` 与项目 agent 入口；当前状态及有实质内容的架构、运行和决策文档集中放入 `.architect/`。
 - agent 约定文件恰好包含一份 New Session Protocol 与一份 Authority Maintenance Protocol，并与幸存的项目规则合并。
-- `PROJECT_STATE.md` 聚焦当下：`summarize.py` 的加载/渲染函数已实现，web 路由返回 501；没有 CLI 参数解析或入口，不能声称 `python summarize.py digest ...` 可运行。下一步须区分建议与已接受计划。
-- 所有历史材料（sprint 复盘、旧 TODO、旧 prompt、被取代的架构笔记）位于 `docs/history/` 下，并带非权威标注。
+- `.architect/PROJECT_STATE.md` 聚焦当下：`summarize.py` 的加载/渲染函数已实现，web 路由返回 501；没有 CLI 参数解析或入口，不能声称 `python summarize.py digest ...` 可运行。下一步须区分建议与已接受计划。
+- 所有历史材料（sprint 复盘、旧 TODO、旧 prompt、被取代的架构笔记）位于 `.architect/history/` 下，并带非权威标注。
 - 业务源文件（`summarize.py`、`app.py`、`tests/`、`requirements.txt`）未被改动。
 - 完成带证据的七问检查；产品方向、当前排期等不能由代码确定时，保留不确定性并报告 `NEEDS_ATTENTION`，不强求 GOOD。
 ## 行为演练（不是单元测试）

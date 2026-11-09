@@ -2,6 +2,8 @@
 
 # Runbook
 
+Run commands from the project root, not from `.architect/`.
+
 ## Setup
 
 Python 3.11+, Flask and PyYAML. Create a virtual environment with `python -m venv .venv`, activate it using the platform's command, then run `pip install -r requirements.txt`.

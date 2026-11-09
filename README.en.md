@@ -6,7 +6,7 @@ Keep project goals, current work, architecture entry points and operating instru
 
 [中文](README.md) | **English**
 
-[![CI](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/lhq418899-sketch/Project-context-architect/actions/workflows/ci.yml)
+[![CI](https://github.com/Sayno-sf/Project-context-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/Sayno-sf/Project-context-architect/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## When to use it
@@ -29,7 +29,7 @@ In Codex with local skill support, send:
 
 ```text
 Use skill-installer to install project-context-architect from the root of:
-https://github.com/lhq418899-sketch/Project-context-architect
+https://github.com/Sayno-sf/Project-context-architect
 Keep the complete directory. If already installed, back up the old copy before
 updating it, and tell me the actual installation path.
 ```
@@ -39,13 +39,13 @@ updating it, and tell me the actual installation path.
 Run in your terminal:
 
 ```bash
-claude plugin marketplace add lhq418899-sketch/Project-context-architect
+claude plugin marketplace add Sayno-sf/Project-context-architect
 claude plugin install project-context-architect@project-context-architect-marketplace
 ```
 
 ### Other assistants with local skill support
 
-Download and extract a source archive from [Releases](https://github.com/lhq418899-sketch/Project-context-architect/releases). Name the complete directory `project-context-architect` and put it in your assistant's supported skills directory. Loading behavior depends on the platform.
+Download and extract a source archive from [Releases](https://github.com/Sayno-sf/Project-context-architect/releases). Name the complete directory `project-context-architect` and put it in your assistant's supported skills directory. Loading behavior depends on the platform.
 
 Confirm that your assistant can discover the skill, then open the target project. See [PLUGIN.md](PLUGIN.md) for installation and validation details.
 
@@ -84,19 +84,23 @@ Replace stale facts; if no facts changed, leave the documents untouched.
 
 For example, a verified fix should no longer appear as pending in the issue list or next steps. Deployment still needs its own evidence. A routine update does not require rereading every file or running a full handoff review.
 
+## Cross-platform relay
+
+When you explicitly ask an agent on another platform to take over, it handles integration for the current task, using existing state and available work summaries. It checks relevant changes without requiring Git, role files or a repeated full acceptance review. For actual parallel work, briefly agree distinct file scopes and one integrator; sequence edits to shared files. This is a cooperation convention, not an enforced lock.
+
 ## What it creates or maintains
 
-The exact files follow your project's existing conventions. Common responsibilities are:
+Project context defaults to `.architect/`; keep platform entry files such as `AGENTS.md` and the README at the root. Common responsibilities are:
 
 | File | Responsibility |
 |---|---|
 | `AGENTS.md` or an existing equivalent | Working rules and what a new session reads first |
-| `PROJECT_STATE.md` | Current status, active work, known issues and next steps |
-| `ARCHITECTURE.md` | Current components, entry points, data flow and boundaries |
-| `RUNBOOK.md` | Environment, startup, tests and troubleshooting |
-| `DECISIONS.md` | Decision rationale worth preserving |
+| `.architect/PROJECT_STATE.md` | Current status, active work, known issues and next steps |
+| `.architect/ARCHITECTURE.md` | Current components, entry points, data flow and boundaries |
+| `.architect/RUNBOOK.md` | Environment, startup, tests and troubleshooting |
+| `.architect/DECISIONS.md` | Decision rationale worth preserving |
 
-New projects start with a working-protocol entry and current state. Other files are created only when they have substantive content. Sound existing names and structures are reused. History is preserved and labeled; handoff summaries favor links over another copy of current status.
+New projects start with a working-protocol entry and current state. Other files are created only when they have substantive content. During consolidation, move relevant context into `.architect/`, repair links and preserve project rules. History is preserved and labeled under `.architect/history/`; handoff summaries favor links over another copy of current status.
 
 Browse the [fictional project example](examples/bootstrap/) to see the document shapes. Its features and verification claims illustrate the format; they are not measured results.
 

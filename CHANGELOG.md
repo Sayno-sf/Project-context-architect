@@ -6,6 +6,15 @@
 
 - 计划提交 [Anthropic 官方插件目录](https://github.com/anthropics/claude-plugins-official)（仓库公开后走提交表单）。
 
+## [0.4.0] - 2026-11-09
+
+### Changed
+
+- 默认将项目状态、架构、运行说明、决策和上下文历史集中到 `.architect/`，保留根目录 Agent 入口。
+- 检查器、示例、模板和演练验收同步新布局；检查器不再自动使用根目录状态文件，自定义路径仍可显式配置。
+- 增加跨平台轻量接力：用户指定接手即承接整合职责，按需核对相关变化，仅实际并行时协调文件范围；不引入锁、看板或额外审批。
+- 更新 GitHub 仓库链接至 `Sayno-sf/Project-context-architect`。
+
 ## [0.3.1] - 2026-10-22
 
 ### Changed

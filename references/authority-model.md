@@ -4,15 +4,19 @@ Use this reference when deciding which document owns a fact, creating a missing 
 
 ## Authority set
 
-The set is deliberately small. BOOTSTRAP always establishes the agent convention file (by default `AGENTS.md`; see the naming rule below) and `PROJECT_STATE.md`. Create `ARCHITECTURE.md`, `DECISIONS.md`, and `RUNBOOK.md` only when their category has substantive current content. Existing projects receive only missing categories that are genuinely needed.
+Store project-context documents in `.architect/` by default. Keep `README.md` and the established agent entry file at the project root; the entry links to `.architect/PROJECT_STATE.md` and task-specific owners. Keep context history under `.architect/history/`. Optional checker configuration and helpers may live in `.architect/context-check.json` and `.architect/tools/`; they are not required for normal use. Do not ignore this folder in version control.
+
+During authorized BOOTSTRAP or REFACTOR, consolidate in-scope context into this layout and repair inbound links and relative paths. Keep one current body, not copies at both locations. Check runtime consumers before moving documents; a redirect note is not a substitute for content a loader expects. Read-only CHECK reports layout issues without moving anything. Explicit project-specific paths can still be configured.
+
+The set is deliberately small. BOOTSTRAP always establishes the agent convention file (by default `AGENTS.md`; see the naming rule below) and `.architect/PROJECT_STATE.md`. Create `.architect/ARCHITECTURE.md`, `.architect/DECISIONS.md`, and `.architect/RUNBOOK.md` only when their category has substantive current content. Existing projects receive only missing categories that are genuinely needed.
 
 | Owner | Question it answers | Owns | Excludes |
 |---|---|---|---|
 | `AGENTS.md` | How should an AI agent work here? | Development protocol, review expectations, user constraints, prohibited behavior, new-session read protocol, authority-maintenance protocol | Current status, architecture narrative, sprint history |
-| `PROJECT_STATE.md` | What is true now? | Overall status, current work, implemented capabilities, known issues, non-goals, next step, handoff capsule | Full history, long design rationale, duplicated commands |
-| `ARCHITECTURE.md` | How is the current system composed? | Components, boundaries, dependency direction, state ownership, main data flows, codebase map, important entry points | Former architecture, speculative future design, sprint timeline |
-| `DECISIONS.md` | Why do stable choices exist? | Accepted or explicitly superseded ADRs whose rationale matters later | Routine implementation details, status updates |
-| `RUNBOOK.md` | How is the project operated? | Environment, variables, start/test/build commands, ports, verification, debug entry points, common operational failures | Product status and duplicated design material |
+| `.architect/PROJECT_STATE.md` | What is true now? | Overall status, current work, implemented capabilities, known issues, non-goals, next step, handoff capsule | Full history, long design rationale, duplicated commands |
+| `.architect/ARCHITECTURE.md` | How is the current system composed? | Components, boundaries, dependency direction, state ownership, main data flows, codebase map, important entry points | Former architecture, speculative future design, sprint timeline |
+| `.architect/DECISIONS.md` | Why do stable choices exist? | Accepted or explicitly superseded ADRs whose rationale matters later | Routine implementation details, status updates |
+| `.architect/RUNBOOK.md` | How is the project operated? | Environment, variables, start/test/build commands, ports, verification, debug entry points, common operational failures | Product status and duplicated design material |
 
 ## Agent convention file naming
 
@@ -31,12 +35,12 @@ The development-protocol owner defaults to `AGENTS.md`, the cross-tool agent con
 
 Add an optional owner only when the information is stable, substantial, and repeatedly needed:
 
-- `DOMAIN.md` or `CONTEXT.md` owns domain vocabulary and meanings.
-- `PRODUCT_RULES.md` owns durable product invariants and permission boundaries.
-- `LEARNING_RULES.md` owns durable learning or pedagogical invariants.
-- `CURRENT_SPRINT.md` owns a long, frequently changing execution contract only when `PROJECT_STATE.md > Current Work` is genuinely insufficient, such as a multi-person sprint with substantial acceptance criteria.
+- `.architect/DOMAIN.md` or `.architect/CONTEXT.md` owns domain vocabulary and meanings.
+- `.architect/PRODUCT_RULES.md` owns durable product invariants and permission boundaries.
+- `.architect/LEARNING_RULES.md` owns durable learning or pedagogical invariants.
+- `.architect/CURRENT_SPRINT.md` owns a long, frequently changing execution contract only when `.architect/PROJECT_STATE.md > Current Work` is genuinely insufficient, such as a multi-person sprint with substantial acceptance criteria.
 
-Prefer one existing filename when a repository already has an equivalent owner. Avoid parallel files such as both `DOMAIN.md` and `CONTEXT.md` unless they have visibly different ownership.
+Prefer one existing filename when a repository already has an equivalent owner. Avoid parallel files such as both `.architect/DOMAIN.md` and `.architect/CONTEXT.md` unless they have visibly different ownership.
 
 ## One fact, one owner
 
@@ -86,14 +90,14 @@ Ensure the root file contains a concise section equivalent to:
 
 L0 Orientation — read first:
 1. `AGENTS.md`
-2. `PROJECT_STATE.md`
+2. `.architect/PROJECT_STATE.md`
 
 L1 Task Context — then read only what the task requires:
-- architecture → `ARCHITECTURE.md`
-- rationale → `DECISIONS.md`
-- operation → `RUNBOOK.md`
-- domain terms → `DOMAIN.md` or `CONTEXT.md`
-- stable product rules → `PRODUCT_RULES.md`
+- architecture → `.architect/ARCHITECTURE.md`
+- rationale → `.architect/DECISIONS.md`
+- operation → `.architect/RUNBOOK.md`
+- domain terms → `.architect/DOMAIN.md` or `.architect/CONTEXT.md`
+- stable product rules → `.architect/PRODUCT_RULES.md`
 
 List only authority documents that exist and are relevant to this project.
 Load history and broad source trees only when the current task provides a reason.
@@ -116,6 +120,12 @@ Apply during authorized work that changes project facts. Read-only review report
 
 Use existing owners: status/work/issues/Next in project state; mechanisms in architecture; repeatable commands in the runbook; durable rationale in decisions; constraints in their established rule owner. Create a separate owner only when its content warrants one. Keep handoff pointers compact rather than duplicating current status.
 
+### Cross-platform relay
+
+- **Take over naturally.** When the user asks another agent to continue, that agent takes integration responsibility for the current task. Use existing project state and available work summaries; keep verified results, unfinished work and Next current when handing off. Do not assume access to another platform's chat or require a separate handoff artifact.
+- **Check relevant changes.** Compare task-relevant claims with current files. Expand only for contradictions, missing evidence or other writers' changes. Reuse applicable verification when its inputs and environment have not changed; do not repeat all prior tests or the full handoff review merely because the platform changed. Git is optional.
+- **Coordinate only actual parallel work.** Briefly agree distinct file scopes and one integrator. Executors may update their scoped technical docs; the integrator reconciles overall state. If scopes overlap, agree one writer or sequence the edits. Sequential work needs no registration, lock, role file or extra approval. These are cooperation rules, not enforced concurrency protection.
+
 ### Full handoff check
 
 After establishing or broadly reorganizing context, or when handoff/milestone readiness is requested, answer all seven from L0 and its named L1 links with file/section evidence:
@@ -133,7 +143,7 @@ A category with no implementation/content yet may be explicitly absent; an exist
 
 Merge semantically equivalent existing rules instead of appending a duplicate protocol.
 
-### `PROJECT_STATE.md`
+### `.architect/PROJECT_STATE.md`
 
 Use this compact present-tense structure:
 
@@ -158,11 +168,11 @@ Keep only constraints that affect decisions; no count quota. Keep detailed sprin
 
 Keep `New Session Handoff` compact and verify anchors after renaming/removing sections. Generated project protocols must work without this skill installed: include the short seven-question check above or link to an existing project-local definition, never a skill-relative path.
 
-### `ARCHITECTURE.md`
+### `.architect/ARCHITECTURE.md`
 
 Describe only deployed or currently implemented architecture. Include a compact map from important directories or modules to responsibilities. Split out a separate codebase map only when repository scale makes the combined file hard to use.
 
-### `DECISIONS.md`
+### `.architect/DECISIONS.md`
 
 Create this file only when at least one decision has durable rationale worth preserving. For each real ADR use:
 
@@ -178,16 +188,16 @@ Date: YYYY-MM-DD
 ### Consequence
 ```
 
-### `RUNBOOK.md`
+### `.architect/RUNBOOK.md`
 
-Use commands verified against scripts, task runners, CI configuration, or a successful local run. Mark any unexecuted command as unverified rather than implying it was tested.
+State the working directory for commands (normally the project root, not `.architect/`). Use commands verified against scripts, task runners, CI configuration, or a successful local run. Mark any unexecuted command as unverified rather than implying it was tested.
 
 ## Historical artifacts
 
 Classify sprint reviews, phase reviews, bug-fix reviews, old prompts, migration plans, and replaced proposals as history when they no longer define current behavior. Place them under a suitable path such as:
 
 ```text
-docs/history/
+.architect/history/
   sprints/
   reviews/
   bugfixes/
@@ -208,4 +218,4 @@ Status: SUPERSEDED
 Superseded by: [current owner or replacement](relative/path.md)
 ```
 
-Keep root focused on the README and active authority files. Preserve historical artifacts and their useful context rather than deleting them.
+Keep the root focused on platform entry files, README and project-required files; context owners and history live under `.architect/`. Preserve historical artifacts and their useful context rather than deleting them.

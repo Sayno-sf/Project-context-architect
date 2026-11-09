@@ -14,3 +14,9 @@ Expand to the relevant full section/document when matches conflict, ownership is
 
 Full seven-question review is for BOOTSTRAP, broad REFACTOR, or requested handoff/milestone readiness. Ordinary work rechecks only affected answers. No authority change means no maintenance write or maintenance-specific check; existing project-required checks still apply.
 
+## Cross-platform relay
+
+- **Take over naturally.** When the user asks another agent to continue, that agent takes integration responsibility for the current task. Use existing project state and available work summaries; keep verified results, unfinished work and Next current when handing off. Do not assume access to another platform's chat or require a separate handoff artifact.
+- **Check relevant changes.** Compare task-relevant claims with current files. Expand only for contradictions, missing evidence or other writers' changes. Reuse applicable verification when its inputs and environment have not changed; do not repeat all prior tests or the full handoff review merely because the platform changed. Git is optional.
+- **Coordinate only actual parallel work.** Briefly agree distinct file scopes and one integrator. Executors may update their scoped technical docs; the integrator reconciles overall state. If scopes overlap, agree one writer or sequence the edits. Sequential work needs no registration, lock, role file or extra approval. These are cooperation rules, not enforced concurrency protection.
+

@@ -16,7 +16,7 @@ The checker reads only the configured authority documents and local Markdown lin
 
 Its configured scan is separate from the agent's reading scope: consume the compact result and inspect relevant findings, not every scanned document. Run once after a batch when useful or required, not after each write. Existing unrelated findings do not authorize cleanup; report them separately from the result of a bounded update. A failing configured scan still cannot be reported as PASS.
 
-Defaults require `AGENTS.md` and `PROJECT_STATE.md` with this skill's English H2 section names. Existing root architecture, runbook, decisions and domain/rule documents are checked when present. A repository with different filenames/headings should configure its equivalents, not rename sound documents just to pass.
+Defaults require root `AGENTS.md` and `.architect/PROJECT_STATE.md` with this skill's English H2 section names. Optional architecture, runbook, decisions and domain/rule documents are discovered inside `.architect/`. There is no automatic fallback to a root state file. Explicit configurations can name different files/headings; all paths are relative to the project root, even when the config is stored in `.architect/`.
 
 ## Configuration
 
@@ -25,10 +25,10 @@ Configuration is opt-in via `--config`; there is no hidden auto-discovery. Paths
 ```json
 {
   "protocol": "CLAUDE.md",
-  "state": "docs/项目状态.md",
+  "state": ".architect/项目状态.md",
   "documents": {
     "CLAUDE.md": ["协作协议", "维护协议"],
-    "docs/项目状态.md": ["项目", "当前工作", "已实现", "已知问题", "下一步", "交接"]
+    ".architect/项目状态.md": ["项目", "当前工作", "已实现", "已知问题", "下一步", "交接"]
   },
   "limits": {"state_chars": 12000, "l0_chars": 16000, "growth_chars": 2000, "growth_ratio": 0.3}
 }
@@ -46,17 +46,17 @@ Exit code `0` means no mechanical errors, `1` means errors, and `2` means an inv
 
 ## Project-local integration
 
-When authorized, copy both `scripts/check_project_context.py` and `scripts/document_checks.py` together to a project-owned tools directory (for example `tools/context/`), preserving their filenames. Record the skill version in the project's existing tool provenance or runbook. Adapt the sample config to the project's existing owners and headings. Runtime checks then need neither this skill nor its installation path.
+When authorized, copy both `scripts/check_project_context.py` and `scripts/document_checks.py` together to a project-owned tools directory (for example `.architect/tools/`), preserving their filenames. Record the skill version in the project's existing tool provenance or runbook. Store the adapted sample config in `.architect/context-check.json`; its document paths stay relative to the project root. Runtime checks then need neither this skill nor its installation path.
 
 Put the exact command in the project's runbook, and reference it from its completion protocol:
 
 ```bash
-python -B tools/context/check_project_context.py . --config context-check.json
+python -B .architect/tools/check_project_context.py . --config .architect/context-check.json
 ```
 
 Use this as a pre-commit **manual command** unless installing a hook is specifically requested. Do not overwrite an existing hook or change `core.hooksPath` merely to enable context checks. The command inspects the working tree, not the Git index; CI validates the committed snapshot.
 
-Merge the [CI example](../examples/integration/context-check.yml) into the existing workflow when CI integration is requested. It checks the PR base for growth and intentionally starts without strict warnings. It assumes the two scripts have been copied to `tools/context/` and the config adapted. CI running is not equivalent to merge enforcement; required-check settings must be configured separately under the user's authorized repository policy.
+Merge the [CI example](../examples/integration/context-check.yml) into the existing workflow when CI integration is requested. It checks the PR base for growth and intentionally starts without strict warnings. It assumes the two scripts have been copied to `.architect/tools/` and the config adapted. CI running is not equivalent to merge enforcement; required-check settings must be configured separately under the user's authorized repository policy.
 
 Before recording integration as active, run the exact project command, verify the workflow parses, and confirm a CI run after publication. Mark unavailable CI/platform verification explicitly. Do not add this integration to adjacent projects outside the request.
 

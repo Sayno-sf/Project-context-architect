@@ -48,7 +48,7 @@ def configuration(root: Path, config: str | None) -> dict:
     if not isinstance(raw, dict) or set(raw) - {"protocol", "state", "documents", "limits"}:
         raise ValueError("config supports only protocol, state, documents and limits")
     protocol = raw.get("protocol", "AGENTS.md")
-    state = raw.get("state", "PROJECT_STATE.md")
+    state = raw.get("state", ".architect/PROJECT_STATE.md")
     if not all(isinstance(x, str) and x.endswith(".md") for x in (protocol, state)) or protocol == state:
         raise ValueError("protocol and state must be distinct Markdown paths")
     docs = raw.get("documents")
@@ -56,8 +56,9 @@ def configuration(root: Path, config: str | None) -> dict:
         docs = {protocol: PROTOCOL_SECTIONS, state: STATE_SECTIONS}
         for name in ("ARCHITECTURE.md", "RUNBOOK.md", "DECISIONS.md",
                      "CONTEXT.md", "DOMAIN.md", "PRODUCT_RULES.md", "LEARNING_RULES.md"):
-            if (root / name).exists():
-                docs[name] = []
+            path = f".architect/{name}"
+            if (root / path).exists():
+                docs[path] = []
     if not isinstance(docs, dict) or not {protocol, state} <= docs.keys():
         raise ValueError("documents must map paths to required H2 headings and include protocol/state")
     for name, sections in docs.items():

@@ -6,7 +6,7 @@ To rehearse or regression-test this mode, run it against the deliberately broken
 
 ## Audit inventory
 
-Inspect root Markdown, project instructions, README files, `docs/`, status and planning files, reviews, prompts, manifests, runtime configuration, entry points, and recent code needed to verify current behavior. Build a working inventory with one classification per relevant document:
+Inspect root Markdown, `.architect/`, project instructions, README files, relevant `docs/`, status and planning files, reviews, prompts, manifests, runtime configuration, entry points, and recent code needed to verify current behavior. Build a working inventory with one classification per relevant document:
 
 - `CURRENT_AUTHORITY` — presently owns current truth;
 - `HISTORICAL` — useful record that no longer governs current behavior;
@@ -33,7 +33,7 @@ For each conflict, identify its authority category and use the category-aware ve
 
 ## Consolidate authority
 
-Read [authority-model.md](authority-model.md). Reuse sound existing owners. Create only missing authority categories. Consolidate current truth into the owner, replace full duplicate descriptions with links, and keep `PROJECT_STATE.md` present-focused. Replace old current statements instead of stacking dated updates; reconcile Known Issues, Next and handoff pointers. Scope source/build/deployment/acceptance claims to their actual evidence.
+Read [authority-model.md](authority-model.md). Reuse sound existing owners. Create only missing authority categories. Consolidate current truth into the owner, replace full duplicate descriptions with links, and keep `.architect/PROJECT_STATE.md` present-focused. Replace old current statements instead of stacking dated updates; reconcile Known Issues, Next and handoff pointers. Scope source/build/deployment/acceptance claims to their actual evidence.
 
 An explicit current user decision may resolve stale repository authority; codify the accepted decision in its owner before completion. When an unresolved semantic choice affects behavior or permissions, pause that choice for user review while continuing independent cleanup. Record it under `Still Uncertain`; do not convert uncertainty into an ADR or current-state assertion.
 
@@ -41,9 +41,9 @@ Merge the two root protocols from [authority-model.md](authority-model.md) into 
 
 ## Archive history
 
-Move historical documents from the root into a discoverable `docs/history/` taxonomy appropriate to the repository. Add historical or superseded labels and relative replacement links. Preserve useful provenance. Record old-to-new paths in the working inventory; verify every moved artifact retains its substantive content and inbound links, including anchors. Compare business files to the pre-edit baseline; function names alone do not prove preservation. For a pure duplicate with no historical value, prefer reducing it to a redirect note or report it for user-directed removal rather than destroying it silently.
+Move historical documents from the root into a discoverable `.architect/history/` taxonomy appropriate to the repository. Add historical or superseded labels and relative replacement links. Preserve useful provenance. Record old-to-new paths in the working inventory; verify every moved artifact retains its substantive content and inbound links, including anchors. Compare business files to the pre-edit baseline; function names alone do not prove preservation. For a pure duplicate with no historical value, prefer reducing it to a redirect note or report it for user-directed removal rather than destroying it silently.
 
-Update links affected by moves when they remain useful. Keep root-level active documents to the README, authority files, and project-required configuration or contribution documents.
+Update links affected by moves when they remain useful. Consolidate context owners under `.architect/`; keep README, agent entry files and project-required configuration or contribution documents at the root. Check existing `.architect/` content before moving into it; reconcile rather than overwrite a conflicting destination.
 
 ## Verify recovery
 

@@ -21,7 +21,8 @@ class RefactorValidation(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "project"
         shutil.copytree(FIXTURE, self.root)
-        hist = self.root / "docs/history"
+        (self.root / "PROJECT_STATE.md").unlink()
+        hist = self.root / ".architect/history"
         hist.mkdir(parents=True)
         for rel in HISTORY:
             old = self.root / rel
@@ -29,26 +30,42 @@ class RefactorValidation(unittest.TestCase):
             (hist / old.name).write_text("> Historical artifact.\n> Not authoritative for current project behavior.\n\n" + text, encoding="utf-8")
             old.unlink()
         self.write("AGENTS.md", "# Rules\n## New Session Protocol\nRead state.\n## Authority Maintenance Protocol\nMaintain facts.\n")
-        self.write("PROJECT_STATE.md", "Last Updated: 2026-10-22\n" + "\n".join("## " + s + "\nExample." for s in STATE_SECTIONS))
-        self.write("README.md", "# Example\n[State](PROJECT_STATE.md#current-work)\n")
+        self.write(".architect/PROJECT_STATE.md", "Last Updated: 2026-10-22\n" + "\n".join("## " + s + "\nExample." for s in STATE_SECTIONS))
+        self.write("README.md", "# Example\n[State](.architect/PROJECT_STATE.md#current-work)\n")
 
     def write(self, rel, text):
-        (self.root / rel).write_text(text, encoding="utf-8")
+        target = self.root / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
 
     def test_valid_fixture_copy(self):
         self.assertEqual([], verify(self.root))
 
+    def test_state_in_root_does_not_satisfy_architect_layout(self):
+        state = self.root / ".architect/PROJECT_STATE.md"
+        self.write("PROJECT_STATE.md", state.read_text(encoding="utf-8"))
+        state.unlink()
+        self.assertTrue(any(".architect/PROJECT_STATE.md missing" in s
+                            for s in verify(self.root)))
+
+    def test_history_must_be_in_architect(self):
+        archive = self.root / ".architect/history/TODO-old.md"
+        self.write("docs/history/TODO-old.md", archive.read_text(encoding="utf-8"))
+        archive.unlink()
+        self.assertTrue(any("expected one archived copy: TODO-old.md" in s
+                            for s in verify(self.root)))
+
     def test_each_archive_is_required(self):
         for rel in HISTORY:
             with self.subTest(rel=rel):
-                p = self.root / "docs/history" / Path(rel).name
+                p = self.root / ".architect/history" / Path(rel).name
                 content = p.read_bytes()
                 p.unlink()
                 self.assertTrue(any("expected one archived copy" in s for s in verify(self.root)))
                 p.write_bytes(content)
 
     def test_archive_content_must_survive(self):
-        self.write("docs/history/TODO-old.md", "> Not authoritative for current project behavior.\nLost original content.\n")
+        self.write(".architect/history/TODO-old.md", "> Not authoritative for current project behavior.\nLost original content.\n")
         self.assertTrue(any("content changed or lost" in s for s in verify(self.root)))
 
     def test_function_names_do_not_prove_preservation(self):
@@ -78,7 +95,7 @@ class RefactorValidation(unittest.TestCase):
         self.assertTrue(any("canonical protocol owner" in s for s in verify(self.root)))
 
     def test_missing_anchor_is_rejected(self):
-        self.write("README.md", "[Work](PROJECT_STATE.md#missing-work)\n")
+        self.write("README.md", "[Work](.architect/PROJECT_STATE.md#missing-work)\n")
         self.assertTrue(any("broken anchor" in s for s in verify(self.root)))
 
     def test_missing_file_is_rejected(self):
@@ -86,11 +103,11 @@ class RefactorValidation(unittest.TestCase):
         self.assertTrue(any("broken link" in s for s in verify(self.root)))
 
     def test_fenced_headings_do_not_satisfy_required_sections(self):
-        self.write("PROJECT_STATE.md", "```md\nLast Updated: 2026-10-22\n" + "\n".join("## " + s for s in STATE_SECTIONS) + "\n```\n")
+        self.write(".architect/PROJECT_STATE.md", "```md\nLast Updated: 2026-10-22\n" + "\n".join("## " + s for s in STATE_SECTIONS) + "\n```\n")
         self.assertTrue(any("missing section" in s for s in verify(self.root)))
 
     def test_handoff_subheading_cannot_replace_current_work(self):
-        p = self.root / "PROJECT_STATE.md"
+        p = self.root / ".architect/PROJECT_STATE.md"
         text = p.read_text(encoding="utf-8").replace("## Current Work", "### Current Work")
         p.write_text(text, encoding="utf-8")
         self.assertTrue(any("missing section: Current Work" in s for s in verify(self.root)))

@@ -25,7 +25,7 @@ For full readiness, ask all seven. A missing or contradictory answer fails that 
 Run available mechanical checks using [project-checks.md](project-checks.md), but keep their result separate from these semantic answers. A script PASS cannot fill an unsupported answer or establish live deployment.
 
 - **Pass** — all seven questions answered from L0 (plus named L1) alone, with no contradiction between files.
-- **Fail** — any question requires reading source code, chat history, `docs/history/`, or a document not listed in the read map; or two authority files give conflicting answers.
+- **Fail** — any question requires reading source code, chat history, `.architect/history/`, or a document not listed in the read map; or two authority files give conflicting answers.
 
 ## Repair discipline
 

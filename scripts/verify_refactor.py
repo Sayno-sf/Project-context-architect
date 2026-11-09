@@ -53,17 +53,17 @@ def verify(root: Path, baseline: Path = FIXTURE, convention: str | None = None) 
                 if not (link or imp):
                     failures.append(f"{adapter.name}: adapter must reference {owner.name}")
 
-    state = root / "PROJECT_STATE.md"
+    state = root / ".architect/PROJECT_STATE.md"
     if not state.is_file():
-        failures.append("PROJECT_STATE.md missing")
+        failures.append(".architect/PROJECT_STATE.md missing")
     else:
         text = state.read_text(encoding="utf-8")
         hs = re.findall(r"(?m)^## (.+?)\s*$", prose(text))
         for section in STATE_SECTIONS:
             if hs.count(section) != 1:
-                failures.append(f"PROJECT_STATE.md missing section: {section} (or duplicated top-level section)")
+                failures.append(f".architect/PROJECT_STATE.md missing section: {section} (or duplicated top-level section)")
         if not re.search(r"(?m)^Last Updated: \d{4}-\d{2}-\d{2}", text):
-            failures.append("PROJECT_STATE.md missing dated Last Updated")
+            failures.append(".architect/PROJECT_STATE.md missing dated Last Updated")
 
     for rel in HISTORY:
         original = baseline / rel
@@ -72,7 +72,7 @@ def verify(root: Path, baseline: Path = FIXTURE, convention: str | None = None) 
             continue
         if (root / rel).exists():
             failures.append(f"history still at original location: {rel}")
-        hits = list((root / "docs" / "history").rglob(Path(rel).name))
+        hits = list((root / ".architect" / "history").rglob(Path(rel).name))
         if len(hits) != 1:
             failures.append(f"expected one archived copy: {rel}; found {len(hits)}")
             continue
