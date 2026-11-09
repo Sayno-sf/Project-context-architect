@@ -1,7 +1,7 @@
 {
   "name": "project-context-architect",
   "description": "Establish and maintain a project's smallest authoritative context: handoff docs, authority refactor, and fresh-session readiness checks.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "lhq418899-sketch"
   },

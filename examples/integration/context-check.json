@@ -1,10 +1,6 @@
 {
   "protocol": "AGENTS.md",
   "state": ".architect/PROJECT_STATE.md",
-  "documents": {
-    "AGENTS.md": ["New Session Protocol", "Authority Maintenance Protocol"],
-    ".architect/PROJECT_STATE.md": ["Project", "Current Status", "Current Work", "Implemented", "Known Issues", "Non-goals", "Next", "New Session Handoff"]
-  },
   "limits": {
     "state_chars": 12000,
     "l0_chars": 16000,

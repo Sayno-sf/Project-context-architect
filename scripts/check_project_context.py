@@ -55,7 +55,8 @@ def configuration(root: Path, config: str | None) -> dict:
     if docs is None:
         docs = {protocol: PROTOCOL_SECTIONS, state: STATE_SECTIONS}
         for name in ("ARCHITECTURE.md", "RUNBOOK.md", "DECISIONS.md",
-                     "CONTEXT.md", "DOMAIN.md", "PRODUCT_RULES.md", "LEARNING_RULES.md"):
+                     "CONTEXT.md", "DOMAIN.md", "PRODUCT_RULES.md", "LEARNING_RULES.md",
+                     "CURRENT_SPRINT.md"):
             path = f".architect/{name}"
             if (root / path).exists():
                 docs[path] = []

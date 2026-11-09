@@ -79,6 +79,41 @@ class ProjectChecks(unittest.TestCase):
         self.assertNotIn("data/private.md", report["inspected_documents"])
         self.assertEqual(0, report["errors"])
 
+    def test_default_scope_checks_existing_sprint(self):
+        self.write(".architect/CURRENT_SPRINT.md", "## Acceptance\n\n[Required check](MISSING.md)")
+        report = checker.inspect(self.root)
+        self.assertEqual("FAIL", report["mechanical_status"])
+        self.assertTrue(any(f["code"] == "broken-link" and
+                            f["path"] == ".architect/CURRENT_SPRINT.md"
+                            for f in report["findings"]))
+
+    def test_sample_config_preserves_default_document_coverage(self):
+        sample = Path(checker.__file__).parent.parent / "examples/integration/context-check.json"
+        shutil.copyfile(sample, self.root / ".architect/context-check.json")
+        documents = {f".architect/{name}.md" for name in (
+            "ARCHITECTURE", "RUNBOOK", "DECISIONS", "CONTEXT", "DOMAIN",
+            "PRODUCT_RULES", "LEARNING_RULES", "CURRENT_SPRINT")}
+        for name in documents:
+            self.write(name, "## Required reference\n\n[Evidence](MISSING.md)")
+        report = checker.inspect(self.root, ".architect/context-check.json")
+        self.assertEqual("FAIL", report["mechanical_status"])
+        self.assertEqual(documents, {f["path"] for f in report["findings"]
+                                     if f["code"] == "broken-link"})
+        self.assertEqual(set(checker.inspect(self.root)["inspected_documents"]),
+                         set(report["inspected_documents"]))
+
+    def test_explicit_documents_remain_the_complete_scope(self):
+        self.write(".architect/RUNBOOK.md", "[Not in this scope](MISSING.md)")
+        self.write("docs/operations.md", "[Required check](MISSING.md)")
+        documents = {"AGENTS.md": checker.PROTOCOL_SECTIONS,
+                     ".architect/PROJECT_STATE.md": checker.STATE_SECTIONS,
+                     "docs/operations.md": []}
+        self.write(".architect/context-check.json", json.dumps({"documents": documents}))
+        report = checker.inspect(self.root, ".architect/context-check.json")
+        self.assertEqual(set(documents), set(report["inspected_documents"]))
+        self.assertEqual({"docs/operations.md"}, {f["path"] for f in report["findings"]
+                                                if f["code"] == "broken-link"})
+
     def test_missing_entry_and_missing_section(self):
         (self.root / "AGENTS.md").unlink()
         p = self.root / ".architect/PROJECT_STATE.md"

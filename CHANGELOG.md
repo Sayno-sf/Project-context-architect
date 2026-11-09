@@ -6,6 +6,14 @@
 
 - 计划提交 [Anthropic 官方插件目录](https://github.com/anthropics/claude-plugins-official)（仓库公开后走提交表单）。
 
+## [0.4.1] - 2026-11-09
+
+### Fixed
+
+- 集成配置样例保留默认文件发现，避免只检查入口和状态文件、漏掉运行说明等权威文件。
+- 默认检查范围补齐已有的 `.architect/CURRENT_SPRINT.md`，未创建的可选文件仍不报错。
+- 明确显式 `documents` 会替换完整检查清单，补充旧配置调整说明及范围漏检回归测试。
+
 ## [0.4.0] - 2026-11-09
 
 ### Changed

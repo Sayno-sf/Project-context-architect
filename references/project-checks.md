@@ -16,11 +16,11 @@ The checker reads only the configured authority documents and local Markdown lin
 
 Its configured scan is separate from the agent's reading scope: consume the compact result and inspect relevant findings, not every scanned document. Run once after a batch when useful or required, not after each write. Existing unrelated findings do not authorize cleanup; report them separately from the result of a bounded update. A failing configured scan still cannot be reported as PASS.
 
-Defaults require root `AGENTS.md` and `.architect/PROJECT_STATE.md` with this skill's English H2 section names. Optional architecture, runbook, decisions and domain/rule documents are discovered inside `.architect/`. There is no automatic fallback to a root state file. Explicit configurations can name different files/headings; all paths are relative to the project root, even when the config is stored in `.architect/`.
+Defaults require root `AGENTS.md` and `.architect/PROJECT_STATE.md` with this skill's English H2 section names. Inside `.architect/`, existing `ARCHITECTURE.md`, `RUNBOOK.md`, `DECISIONS.md`, `CONTEXT.md`, `DOMAIN.md`, `PRODUCT_RULES.md`, `LEARNING_RULES.md` and `CURRENT_SPRINT.md` are also checked; their absence is not an error. There is no automatic fallback to a root state file. Explicit configurations can name different files/headings; all paths are relative to the project root, even when the config is stored in `.architect/`.
 
 ## Configuration
 
-Configuration is opt-in via `--config`; there is no hidden auto-discovery. Paths are relative to the project root and must remain within it. Copy and adapt the [sample config](../examples/integration/context-check.json) only when integration is requested. For example, a Chinese project can use:
+Configuration is opt-in via `--config`; there is no hidden auto-discovery. Paths are relative to the project root and must remain within it. Copy and adapt the [sample config](../examples/integration/context-check.json) only when integration is requested. The sample omits `documents` to retain default document discovery. A supplied `documents` map replaces the entire scan list; include every authority document intended for checking. For example, a Chinese project with only an entry and state document can use:
 
 ```json
 {
@@ -34,7 +34,9 @@ Configuration is opt-in via `--config`; there is no hidden auto-discovery. Paths
 }
 ```
 
-`documents` maps each required document to required, nonempty H2 headings; an empty list still checks existence, content and links. Include the protocol and state paths. Do not remove meaningful checks just to make an existing defect pass. Limits are review thresholds, not universal document-size targets. Growth warns only when both absolute and proportional thresholds are exceeded. `--baseline-ref` must resolve locally; omitted means no growth comparison. Use the PR base commit in CI; HEAD on a checked-out PR would compare the file to itself.
+`documents` maps each required document to required, nonempty H2 headings; an empty list still checks existence, content and links. Include the protocol and state paths, and add entries such as `".architect/RUNBOOK.md": []` when those documents should be checked. Linking to a document does not add its body to the scan. Use `inspected_documents` in the JSON result to verify coverage. Existing copied configs with a two-file `documents` map remain limited to those files: remove the map to use defaults, or expand it while preserving custom names/headings. Do not remove meaningful checks just to make an existing defect pass.
+
+Limits are review thresholds, not universal document-size targets. Growth warns only when both absolute and proportional thresholds are exceeded. `--baseline-ref` must resolve locally; omitted means no growth comparison. Use the PR base commit in CI; HEAD on a checked-out PR would compare the file to itself.
 
 ## Interpret the result
 
