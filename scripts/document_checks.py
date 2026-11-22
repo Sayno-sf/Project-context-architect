@@ -38,8 +38,13 @@ def anchors(text: str) -> set[str]:
     for title in headings(text):
         slug = re.sub(r"[^\w\- ]", "", title.lower()).replace(" ", "-")
         n = counts.get(slug, 0)
-        counts[slug] = n + 1
-        result.add(slug if n == 0 else f"{slug}-{n}")
+        anchor = slug
+        # A literal heading can collide with another heading's generated suffix.
+        while anchor in result:
+            n += 1
+            anchor = f"{slug}-{n}"
+        counts[slug] = n
+        result.add(anchor)
     class ExplicitAnchors(HTMLParser):
         def handle_starttag(self, tag, attrs):
             for key, value in attrs:

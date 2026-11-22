@@ -132,6 +132,26 @@ class ProjectChecks(unittest.TestCase):
         self.append("AGENTS.md", "@MISSING.md")
         self.assertIn("broken-import", self.codes(checker.inspect(self.root)))
 
+    def test_heading_anchor_suffix_does_not_collide(self):
+        cases = (
+            (("Setup", "Setup", "Setup-1"), "setup-1-1", "setup-2"),
+            (("Setup", "Setup-1", "Setup"), "setup-2", "setup-1-1"),
+        )
+        for headings, valid, invalid in cases:
+            with self.subTest(headings=headings):
+                self.write("docs/moved.md", "\n\n".join(f"## {heading}" for heading in headings))
+                self.write(".architect/RUNBOOK.md", f"[Moved section](../docs/moved.md#{valid})")
+                self.assertEqual(0, checker.inspect(self.root)["errors"])
+                self.append(".architect/RUNBOOK.md", f"[Missing section](../docs/moved.md#{invalid})")
+                self.assertIn("broken-anchor", self.codes(checker.inspect(self.root)))
+
+    def test_explicit_html_anchors_do_not_renumber_headings(self):
+        self.write("docs/evidence.md", '<a id="setup-1"></a>\n\n## Setup\n\n## Setup')
+        self.append(".architect/PROJECT_STATE.md", "[Evidence](../docs/evidence.md#setup-1)")
+        self.assertEqual(0, checker.inspect(self.root)["errors"])
+        self.append(".architect/PROJECT_STATE.md", "[Missing](../docs/evidence.md#setup-2)")
+        self.assertIn("broken-anchor", self.codes(checker.inspect(self.root)))
+
     def test_explicit_html_anchor_is_valid(self):
         self.write("docs/evidence.md", '<a id="restart-verified"></a>\n## 已核验\nEvidence.')
         self.append(".architect/PROJECT_STATE.md", "[Evidence](../docs/evidence.md#restart-verified)")
