@@ -1,7 +1,7 @@
 {
   "name": "project-context-architect",
   "description": "Agent skill for cross-session project context, cross-agent handoffs, and keeping project documentation current.",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": {
     "name": "lhq418899-sketch"
   },

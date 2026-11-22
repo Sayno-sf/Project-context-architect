@@ -10,6 +10,8 @@ Date: 2026-08-14
 ### Context
 The web view and CLI initially each rendered digests with their own templates, producing subtly different output.
 
+The [digest parity review](history/reviews/digest-parity.md) records the original disagreement about which template should change.
+
 ### Decision
 `summarize.py` owns digest construction; `app.py` only wraps CLI output in HTML.
 

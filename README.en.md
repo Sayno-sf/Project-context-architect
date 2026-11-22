@@ -117,7 +117,9 @@ Project context defaults to `.architect/`; keep platform entry files such as `AG
 | `.architect/RUNBOOK.md` | Environment, startup, tests and troubleshooting |
 | `.architect/DECISIONS.md` | Decision rationale worth preserving |
 
-New projects start with a working-protocol entry and current state. Other files are created only when they have substantive content. During consolidation, move relevant context into `.architect/`, repair links and preserve project rules. History is preserved and labeled under `.architect/history/`; handoff summaries favor links over another copy of current status.
+New sessions start with the agent entry file and current state, then read the sections needed for the task. Report ordinary progress in chat and update changed facts in their existing document. Save a separate report when requested or when it preserves evidence worth keeping.
+
+Routine reads and searches skip archives and old notes. If current state requires a sign-off recorded in a phase review, read the cited passage. For an earlier issue, follow the evidence from `DECISIONS.md` or the troubleshooting entry. Use relative links for shared project files and a stable URL or retrievable record ID for external reviews. When moving a file or renaming a heading, check references to the old filename or anchor, including links from archived records.
 
 Browse the [fictional project example](examples/bootstrap/) to see the document shapes. Its features and verification claims illustrate the format; they are not measured results.
 

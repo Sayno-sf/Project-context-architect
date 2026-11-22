@@ -15,7 +15,7 @@ The set is deliberately small. BOOTSTRAP always establishes the agent convention
 | `AGENTS.md` | How should an AI agent work here? | Development protocol, review expectations, user constraints, prohibited behavior, new-session read protocol, authority-maintenance protocol | Current status, architecture narrative, sprint history |
 | `.architect/PROJECT_STATE.md` | What is true now? | Overall status, current work, implemented capabilities, known issues, non-goals, next step, handoff capsule | Full history, long design rationale, duplicated commands |
 | `.architect/ARCHITECTURE.md` | How is the current system composed? | Components, boundaries, dependency direction, state ownership, main data flows, codebase map, important entry points | Former architecture, speculative future design, sprint timeline |
-| `.architect/DECISIONS.md` | Why do stable choices exist? | Accepted or explicitly superseded ADRs whose rationale matters later | Routine implementation details, status updates |
+| `.architect/DECISIONS.md` | Why do stable choices exist? | Accepted or explicitly superseded decisions, their reasons and links to supporting records | Routine implementation details, status updates |
 | `.architect/RUNBOOK.md` | How is the project operated? | Environment, variables, start/test/build commands, ports, verification, debug entry points, common operational failures | Product status and duplicated design material |
 
 ## Agent convention file naming
@@ -52,7 +52,7 @@ Use [incremental maintenance](maintenance.md): read the affected section, verify
 
 For volatile claims, identify the component/repository, environment, state, and verification evidence/date where relevant. Distinguish implemented source, built assets, loaded service, observed runtime and user acceptance. Evidence for one does not establish another. A mention of an adjacent deployment does not authorize access to it; respect task scope and mark unverified targets.
 
-Architecture owns mechanisms and boundaries, the runbook owns repeatable operations, and project state owns current delivery and outstanding work. Keep one-off PIDs, test counts, backup manifests and migration receipts in evidence records. Closed issues leave Known Issues; completed tasks stop appearing as Current Work.
+Architecture owns mechanisms and boundaries, the runbook owns repeatable operations, and project state owns current delivery and outstanding work. Link to an existing receipt or test report when its details matter later. Closed issues leave Known Issues; completed tasks stop appearing as Current Work.
 
 Keep L0 cheap to read. Review character count or estimated tokens, repeated claims and the effort to answer the seven handoff questions; line count alone hides long paragraphs. Split substantial L1 detail by stable responsibility and link to the relevant section. Do not add files merely to meet a numeric budget or push release history into CURRENT_SPRINT.md.
 
@@ -100,7 +100,8 @@ L1 Task Context — then read only what the task requires:
 - stable product rules → `.architect/PRODUCT_RULES.md`
 
 List only authority documents that exist and are relevant to this project.
-Load history and broad source trees only when the current task provides a reason.
+Reuse unchanged sections. Skip archives, superseded material and scratch notes in routine reads and searches. If the task or a current owner points to a requirement, acceptance condition or evidence needed now, read the cited passage, even in a phase report or archive.
+For a past issue, look up its topic in decisions or the relevant owner and follow the evidence link. If the pointer fails, search the likely archive by issue, symptom or date. Read current code or runtime evidence as needed. A history audit can inspect its requested scope.
 ```
 
 Also merge this event-driven write-back contract into the same root file:
@@ -108,17 +109,17 @@ Also merge this event-driven write-back contract into the same root file:
 ```md
 ## Authority Maintenance Protocol
 
-Apply during authorized work that changes project facts. Read-only review reports proposed changes. If no authority fact changes, leave authority untouched.
+Before writing a document, identify who will need it after this conversation. Report ordinary progress in chat. Update an existing authority only when its facts change. A separate report is appropriate for an explicit deliverable or a record with lasting evidence that would otherwise be lost. Reuse an existing record when it already serves that purpose. Read-only review reports proposed changes.
 
 ### Incremental maintenance
 
 1. Read L0 once per session, then only the L1 sections needed for the task. Reuse current context; refresh a target that may have changed before editing. Track Current Work only when the task changes the project's main work or Next.
 2. For a changed fact, read its owner section, verify new evidence, and search active authority and known summaries for the subject, aliases and links. Follow known dependencies; an absent keyword match does not establish that no dependent summary exists. Expand only if ownership, evidence or impact is unclear. No full-file reread or permanent delta table is required for every write.
 3. Update the owner in the same task and retire affected stale summaries, issues and Next entries. Codify an accepted user decision before work depends on it. Leave unrelated facts and history alone; link useful evidence instead of appending a delivery diary.
-4. Keep source, build, loaded service and acceptance distinct. Label plans and unknowns; implementation alone cannot rewrite a product rule. Preserve existing rules and runtime consumers when moving or rewriting documents.
+4. Distinguish source, build, loaded service and acceptance. Label plans and unknowns. Implementation alone cannot change product rules. Preserve runtime consumers. For a file move or heading rename, search project docs, including history, for the old filename or anchor. Repair affected links or preserve the old target, then verify them.
 5. At the end of a coherent batch, inspect the diff, changed claims, dependent summaries and links. Run the documented project check if required by the workflow; review relevant findings without treating mechanical PASS as truth. Report unrelated failures separately; do not claim the whole scan passed. No per-write check or repeated unchanged report is needed.
 
-Use existing owners: status/work/issues/Next in project state; mechanisms in architecture; repeatable commands in the runbook; durable rationale in decisions; constraints in their established rule owner. Create a separate owner only when its content warrants one. Keep handoff pointers compact rather than duplicating current status.
+Keep status in project state, mechanisms in architecture, commands in the runbook and constraints in their rule owner. In decisions, explain the problem, lasting choice and reason. Cite shared project records by relative link and external originals by stable URL or retrievable record ID. A recurring fault can link to its evidence from the issue or runbook. Keep handoff pointers compact.
 
 ### Cross-platform relay
 
@@ -174,7 +175,7 @@ Describe only deployed or currently implemented architecture. Include a compact 
 
 ### `.architect/DECISIONS.md`
 
-Create this file only when at least one decision has durable rationale worth preserving. For each real ADR use:
+Create this file when a decision has lasting rationale. Give the entry a searchable problem or component name and explain the choice before citing evidence. Use a relative link for a record shared with the project. For a PR, review comment or other external original, cite its stable URL or its system, project and record ID. A local temp path will not survive handoff. Point to the relevant passage; for a large log a file link plus a heading or event ID also works. Verify what the available evidence supports. For each real ADR use:
 
 ```md
 ## ADR-NNN — Title

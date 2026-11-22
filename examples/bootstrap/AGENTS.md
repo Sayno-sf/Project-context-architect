@@ -19,21 +19,21 @@ L1 Task Context — then read only what the task requires:
 - rationale → [DECISIONS.md](.architect/DECISIONS.md)
 - operation → [RUNBOOK.md](.architect/RUNBOOK.md)
 
-Load history and broad source trees only when the current task provides a reason.
+Read L0 once per session and reuse unchanged sections. Skip archives, superseded material and scratch notes in routine searches and reads. If the task or a current owner cites a requirement, sign-off or evidence needed now, read that passage even in a phase report. For an old issue, follow its decision or issue link, or search the likely archive by symptom if the link fails. Read source when needed.
 
 ## Authority Maintenance Protocol
 
-Apply during authorized work that changes project facts. Read-only review reports proposed changes. If no authority fact changes, leave authority untouched.
+Report routine progress in the conversation. Before writing project documentation, check whether a verified fact changed in an existing owner, the task calls for a document, or original evidence needs to be preserved for later use. If none apply, finish in chat. Read-only review reports proposed changes.
 
 ### Incremental maintenance
 
-1. Read L0 once per session, then only the L1 sections needed for the task. Reuse current context; refresh a target that may have changed before editing. Track Current Work only when the task changes the project's main work or Next.
+1. Refresh the affected section before editing if it may have changed. Track Current Work only when the task changes the project's main work or Next.
 2. For a changed fact, read its owner section, verify new evidence, and search active authority and known summaries for the subject, aliases and links. Follow known dependencies; an absent keyword match does not establish that no dependent summary exists. Expand only if ownership, evidence or impact is unclear. No full-file reread or permanent delta table is required for every write.
 3. Update the owner in the same task and retire affected stale summaries, issues and Next entries. Codify an accepted user decision before work depends on it. Leave unrelated facts and history alone; link useful evidence instead of appending a delivery diary.
-4. Keep source, build, loaded service and acceptance distinct. Label plans and unknowns; implementation alone cannot rewrite a product rule. Preserve existing rules and runtime consumers when moving or rewriting documents.
+4. Distinguish source, build, loaded service and acceptance. Label plans and unknowns. Implementation alone cannot change product rules. Preserve runtime consumers. For a file move or heading rename, search project docs, including history, for the old filename or anchor and verify affected links after the edit.
 5. At the end of a coherent batch, inspect the diff, changed claims, dependent summaries and links. Run the documented project check if required by the workflow; review relevant findings without treating mechanical PASS as truth. Report unrelated failures separately; do not claim the whole scan passed. No per-write check or repeated unchanged report is needed.
 
-Use existing owners: status/work/issues/Next in project state; mechanisms in architecture; repeatable commands in the runbook; durable rationale in decisions; constraints in their established rule owner. Create a separate owner only when its content warrants one. Keep handoff pointers compact rather than duplicating current status.
+Keep status in project state, mechanisms in architecture, commands in the runbook and constraints in their rule owner. Record a lasting choice and its reason in decisions. Link shared evidence by relative path, or cite the external original by stable URL or retrievable record ID. A recurring fault can link to evidence from its issue or runbook entry. Keep handoff pointers compact.
 
 ### Cross-platform relay
 
